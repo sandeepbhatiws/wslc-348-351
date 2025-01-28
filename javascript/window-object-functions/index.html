@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Object Function</title>
+    <style>
+        .row{
+            width: 1200px;
+            margin: auto;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: black;
+            color: white;
+            border-radius: 15px;
+            font-size: 20px;
+        }
+        button{
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .hide{
+            display: none;
+        }
+        .counter{
+            width: 100px;
+            padding: 15px;
+            font-weight: bold;
+            background-color: black;
+            color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+
+        }
+    </style>
+</head>
+<body>
+    <button onclick="settimeout()"> Set Time Out</button>
+    <button onclick="cleardivValue()">Clear Time Out</button>
+    <button onclick="startTimer()">Set Interval</button>
+    <button onclick="stopTimer()">Clear Interval</button>
+    <button onclick="reset()">Reset</button>
+
+    <div class="row hide" id="row">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo debitis consequatur ipsa ut nulla ab? Tempore voluptates alias ad autem, voluptate eligendi porro neque sapiente accusantium laboriosam corporis deserunt dolor!
+    </div>
+
+    <div class="counter" id="counter">
+        0
+    </div>
+
+
+    <script>
+
+        var x = '';
+        function showDiv(){
+            document.getElementById('row').classList.remove('hide');
+        }
+        
+        // setTimeout(showDiv,3000);
+
+        // setTimeout(() => {
+        //     document.getElementById('row').classList.remove('hide');
+        // },3000);
+
+
+        function settimeout(){
+            x = setTimeout(() => {
+                        document.getElementById('row').classList.remove('hide');
+                    },3000);
+        }
+
+        function cleardivValue(){
+            clearTimeout(x);
+        }
+
+        var counter = 0;
+        function startTimer(){
+
+            x = setInterval(() => {
+                counter++;
+                document.getElementById('counter').innerText = counter;
+            },1000);
+
+        }
+
+        function stopTimer(){
+            clearInterval(x)
+        }
+
+        function reset(){
+            counter = 0;
+            document.getElementById('counter').innerText = counter;
+            clearInterval(x)
+        }
+
+    </script>
+</body>
+</html>

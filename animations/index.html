@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Animations</title>
+	<style type="text/css">
+		.row{
+			width: 200px;
+			height: 50px;
+			border-radius: 20px;
+			background: black;
+			margin: auto;
+			animation-duration: 1s;
+			animation: changeColor2;
+			animation-iteration-count: infinite;
+/*			animation-delay: 5s;*/
+		}
+
+		@keyframes changeColor {
+			from {
+				background: black;
+			}
+			to {
+				background-color: red;
+			}
+		}
+
+
+		@keyframes changeColor2 {
+			0% {
+				background: black;
+			}
+			50%{
+				background: green;
+			}
+			100% {
+				background-color: red;
+			}
+		}
+
+		@keyframes moveDiv{
+			from{
+				transform: translateX(0px);
+			}
+			to{
+				transform: translateX(1000px);
+			}
+		}
+
+
+		.row1{
+			width: 200px;
+			height: 100px;
+			background-color: black;
+			margin-bottom: 20px;
+			animation: moveDiv;
+			animation-duration: 4s;
+			animation-timing-function: ease;
+			animation-iteration-count: infinite;
+			animation-direction: alternate-reverse;
+		}
+		.row2{
+			width: 200px;
+			height: 100px;
+			background-color: black;
+			margin-bottom: 20px;
+			animation: moveDiv;
+			animation-duration: 10s;
+			animation-timing-function: linear;
+		}
+		.row3{
+			width: 200px;
+			height: 100px;
+			background-color: black;
+			margin-bottom: 20px;
+			animation: moveDiv;
+			animation-duration: 10s;
+			animation-timing-function: ease-in;
+		}
+		.row4{
+			width: 200px;
+			height: 100px;
+			background-color: black;
+			margin-bottom: 20px;
+			animation: moveDiv;
+			animation-duration: 10s;
+			animation-timing-function: ease-out;
+		}
+		.row5{
+			width: 200px;
+			height: 100px;
+			background-color: black;
+			margin-bottom: 20px;
+			animation: moveDiv;
+			animation-duration: 10s;
+			animation-timing-function: ease-in-out;
+		}
+
+	</style>
+</head>
+<body>
+	<!-- <div class="row"></div> -->
+
+	<div class="row1"></div>
+	<!-- <div class="row2"></div>
+	<div class="row3"></div>
+	<div class="row4"></div>
+	<div class="row5"></div> -->
+</body>
+</html>

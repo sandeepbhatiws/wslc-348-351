@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+</head>
+<body>
+    <div class="row" id="row">
+        1. <b>Lorem ipsum dolor</b> sit amet consectetur, adipisicing elit. Eos eligendi sequi iure quisquam cumque suscipit natus asperiores tenetur dolorem? Porro asperiores hic voluptatem sit aspernatur dicta eius ad tempora sed!
+    </div>
+    <div class="row" id="row1">
+        2. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos eligendi sequi iure quisquam cumque suscipit natus asperiores tenetur dolorem? Porro asperiores hic voluptatem sit aspernatur dicta eius ad tempora sed!
+    </div>
+    <div class="row" id="row">
+        3. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos eligendi sequi iure quisquam cumque suscipit natus asperiores tenetur dolorem? Porro asperiores hic voluptatem sit aspernatur dicta eius ad tempora sed!
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        //get data
+        // // var output = document.getElementById('row').innerText;
+        // var output = document.getElementById('row').innerHTML;
+
+        // // insert data
+        // // document.getElementById('output').innerText = output;
+        // document.getElementById('output').innerHTML = output;
+        // console.log(output);
+
+        // var output = document.getElementsByClassName('row');
+
+        // console.log(output[0].innerHTML);
+
+        // var output = document.getElementsByTagName('div');
+
+        // console.log(output[0]);
+
+        var output = document.querySelectorAll('#row');
+        var output = document.querySelectorAll('.row');
+        var output = document.querySelectorAll('div');
+
+
+        var output = document.querySelector('#row');
+        var output = document.querySelector('.row');
+        var output = document.querySelector('div');
+
+
+        console.log(output.innerText);
+
+    </script>
+
+</body>
+</html>

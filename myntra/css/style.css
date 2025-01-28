@@ -1,0 +1,88 @@
+*{
+	padding: 0px;
+	margin: 0px;
+	text-decoration: none;
+}
+body{
+	font-family: "Roboto", serif;
+}
+.main{
+	width: 100%;
+}
+.outer_header{
+	padding: 23px 58px;
+	box-shadow: 0px 0.5px 5px 0px lightgray;
+}
+.header{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.logo img{
+	width: 55px;
+}
+.menu ul{
+	display: flex;
+	list-style: none;
+	gap: 30px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin: 0px 25px;
+}
+.menu ul li{
+	color: #352C3F;
+	font-size: 14px;
+}
+.outer_search{
+	display: flex;
+	align-items: center;
+	background-color: #F5F5F6;
+	padding: 10px 20px;
+	gap: 15px;
+	color: #727389;
+	flex-basis: 35%;
+	margin: 0px 15px;
+}
+.outer_search input{
+	width: 100%;
+	background-color: #F5F5F6;
+	outline: none;
+	padding: 5px 0px;
+	border: 0px;
+}
+.search_input{
+	width: 100%;
+}
+.right_icon_outer{
+	display: flex;
+	gap: 20px;
+	text-align: center;
+	font-size: 14px;
+	
+}
+.right_content{
+	font-weight: bold;
+	padding-top: 10px;
+}
+.code_outer{
+	padding: 15px 60px 0px 60px;
+}
+.code{
+	display: flex;
+	justify-content: center;
+}
+.code_image img{
+	width: 100%;
+}
+.code_image{
+	flex-grow: 1;
+}
+.winterbash{
+	padding: 0px;
+}
+.products{
+	flex-wrap: wrap;
+}
+.product{
+	flex-basis: 16%;
+}

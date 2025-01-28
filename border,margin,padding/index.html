@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<title>Border Margin Padding</title>
+		<style type="text/css">
+			.outer{
+				width: 1000px;
+				height: 1000px;
+/*				border: 1px solid black;*/
+				border-top: 5px solid red;
+				border-right: 5px solid blue;
+				border-bottom: 5px solid green;
+				border-left: 5px solid purple;
+				margin: auto;
+			}
+			.row1{
+				width: 1000px;
+				height: 100px;
+				border: 1px solid red;
+				text-align: center;
+			}
+			.row2{
+				width: 1000px;
+				height: 40px;
+				border: 1px solid green;
+			}
+			.row2column{
+				float: left;
+				width: 198px;
+				height: 38px;
+				text-align: center;
+				border: 1px solid black;
+			}
+			.row3{
+				border: 1px solid black;
+				width: 1000px;
+				height: 400px;
+			}
+			.row3column{
+				width: 198px;
+				height: 250px;
+				border: 1px solid green;
+				float:left;
+				/*margin-top: 20px;
+				margin-left: 20px;
+				margin-right: 20px;
+				margin-bottom: 20px;*/
+				margin: 25px;
+				/*margin: 20px 30px;
+				margin: 10px 20px 30px 40px;*/
+			}
+			.row4{
+				width: 1000px;
+				height: 400px;
+			}
+			.row4column1{
+				width: 250px;
+				height: 250px;
+				border: 1px solid red;
+				float: left;
+			}
+			.row4column2{
+				width: 250px;
+				height: 250px;
+				border: 1px solid red;
+				box-sizing: border-box;
+				float: left;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="outer">
+			<div class="row1">Welcome</div>
+			<div class="row2">
+				<div class="row2column">Home</div>
+				<div class="row2column">About</div>
+				<div class="row2column">Course</div>
+				<div class="row2column">Gallery</div>
+				<div class="row2column">Contact</div>
+			</div>
+			<div class="row3">
+				<div class="row3column"></div>
+				<div class="row3column"></div>
+				<div class="row3column"></div>
+				<div class="row3column"></div>
+			</div>
+			<div class="row4">
+				<div class="row4column1"></div>
+				<div class="row4column2">Top Mentorship Programs in Tech, Marketing, & Data- Designed and Delivered by industry maestros. Top Mentorship Programs in Tech, Marketing, & Data- Designed and Delivered by industry maestros.</div>
+			</div>
+		</div>
+	</body>
+</html>

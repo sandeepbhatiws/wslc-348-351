@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array</title>
+</head>
+<body>
+    
+
+    <script>
+        // var userNames = ['sumit','yogesh','nikita','ram','sultan'];    // Index Array
+
+        // console.log(userNames.length);
+        // console.log(userNames[4]);
+        // console.log(userNames['yogesh']);
+
+
+        // userNames[5] = 'Ram';   // Value Insert into Array
+        // userNames[1] = 'Ravi';   // Value update into Array
+
+        // userNames[10] = 'Ram';   // Value Insert into Array
+        // console.log(userNames);
+
+
+
+        var numbers = [32,21,3,54,25];
+        console.log(numbers);
+
+        numbers.push(5,6,4);  // value added in last
+
+        console.log(numbers);
+
+        numbers.pop();
+        numbers.pop();
+
+        console.log(numbers);
+
+        var numbers = [32,21,3,54,25,5,6,4];
+
+        for(var i = 0; i < numbers.length; i++){
+            document.write(numbers[i]+'<br>');
+            numbers.pop();
+        }
+
+        console.log(numbers);
+        
+
+        // for(var value of numbers){
+        //     document.write(value+'<br>');
+        //     numbers.pop();
+        // }
+
+        // for(var index in numbers){
+        //     document.write(numbers[index]+'<br>');
+        // }
+
+
+    </script>
+</body>
+</html>

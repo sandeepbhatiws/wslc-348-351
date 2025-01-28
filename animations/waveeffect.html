@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Animations</title>
+	<style type="text/css">
+		
+		.wave{
+			margin: auto;
+			width: 200px;
+			margin-top: 50px;
+		}
+		button{
+			width: 150px;
+			background: brown;
+			font-size: 20px;
+			padding: 10px 15px;
+			box-sizing: border-box;
+			border: 0px;
+			border-radius: 10px;
+			color: white;
+			font-weight: bold;
+			position: relative;
+		}
+
+		.div{
+			width: 150px;
+			background: brown;
+			position: absolute;
+			font-size: 20px;
+			padding: 10px 15px;
+			box-sizing: border-box;
+			border: 0px;
+			border-radius: 10px;
+			color: white;
+			font-weight: bold;
+			left: 0px;
+			height: 100%;
+			top: 0px;
+			animation: waveEffect;
+			animation-duration: 2s;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+		}
+
+		@keyframes waveEffect{
+			0%{
+				transform: scale(1.0);
+				opacity: 0;
+			}
+			50%{
+				transform: scale(1.2);
+				opacity: 1;
+			}
+			100%{
+				transform: scale(1.0);
+				opacity: 0;
+			}
+		}
+
+	</style>
+</head>
+<body>
+	
+	<div class="wave">
+		<button>
+			Submit
+			<div class="div"></div>
+		</button>
+	</div>
+</body>
+</html>

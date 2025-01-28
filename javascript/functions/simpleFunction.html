@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions</title>
+</head>
+<body>
+    <button onclick="test()">Click Me</button>
+
+    <button onclick="addition(5,10)"> Add (5, 10) </button>
+    <button onclick="addition(15,10)"> Add (15, 10) </button>
+
+    <button onclick="multiple(15,10)"> Multiple (15, 10) </button>
+
+    <script>
+        // Simple Function
+        function test(){
+            console.log('Welcome to WS');
+        }
+
+        // test();
+        
+
+        // Argument Function
+        function addition(a,b){
+            console.log(a+b);
+        }
+
+        // Argument Function
+        function multiple(a,b){
+            c = add(a,b);
+            console.log(c);
+            console.log((a*b) + c);
+        }
+
+
+        //Return Statement
+        function add(a,b){
+            c = a+b;
+            return c;
+        }
+
+    </script>
+</body>
+</html>

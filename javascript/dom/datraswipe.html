@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Swipe</title>
+    <style>
+        .row{
+            width: 1000px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        .content{
+            flex-basis: 45%;
+            padding: 15px;
+            border: 1px solid gray;
+            border-radius: 15px;
+        }
+        .button {
+            margin: auto;
+            width: 1000px;
+            display: flex;
+            justify-content: center;
+        }
+        .button button{
+            margin-top: 30px;
+            background-color: black;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="content" id="content1">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero eveniet omnis nesciunt inventore ex provident vel corporis cum labore dolores laborum facilis quaerat, sunt perferendis excepturi fugit unde maiores odio?
+        </div>
+        <div class="content" id="content2">
+            Vero eveniet omnis nesciunt inventore ex provident vel corporis cum labore dolores laborum facilis quaerat, sunt perferendis excepturi fugit unde maiores odio?
+        </div>
+    </div>
+    <div class="button">
+        <button onclick="swipeData()">Swipe Data</button>
+    </div>
+
+    <script>
+        function swipeData(){
+            var a = document.getElementById('content1').innerText;
+            var b = document.getElementById('content2').innerText;
+            var c = a;
+
+            document.getElementById('content1').innerText = b;
+            document.getElementById('content2').innerText = c;
+
+        }
+    </script>
+</body>
+</html>
