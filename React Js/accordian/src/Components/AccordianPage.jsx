@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
+import FaqSection from './FaqSection'
+import faqdata from '../faqdata'
 
 export default function AccordianPage() {
+
+    const [allFaqData, setAllFaqData] = useState((faqdata.length > 0) ? faqdata : []);
+
+    const [currentFaq, setCurrentFaq] = useState(allFaqData[0]['id']);
+
   return (
     <>
         <div class="main">
@@ -9,15 +16,14 @@ export default function AccordianPage() {
             </div>
 
             <div class="row">
-                <div class="outerQuestion">
-                    <div class="question">
-                        From where can I log in to My Account?
-                        <span>-</span>
-                    </div>
-                    <div class="answer">
-                        On our home page at the top right corner you will see the option of "Sign In or Register". Click on it and you will be guided to the "log in" page.
-                    </div>
-                </div>
+                {
+                    allFaqData.map((v,i) => {
+                        return(
+                            <FaqSection faqData={v} key={i} currentFaq={currentFaq} setCurrentFaq ={setCurrentFaq}/>
+                        )
+                    })
+                }
+                
             </div>
         </div>
     </>
