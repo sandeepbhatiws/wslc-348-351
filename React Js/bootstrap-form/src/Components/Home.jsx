@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import UserForm from './UserForm'
 import UserTable from './UserTable'
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
 
@@ -8,6 +9,7 @@ export default function Home() {
 
     return (
         <>
+            <ToastContainer/>
             <div className='container-fluid p-5'>
                 <div className='container'>
                     <div className='row text-center mb-4'>

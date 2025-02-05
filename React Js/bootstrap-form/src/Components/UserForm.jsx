@@ -1,8 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { toast } from 'react-toastify';
 
 export default function UserForm({allUserData, setAllUserData}) {
+
+    const [formStatus, setFormStatus] = useState(false);
 
     var name = useRef();
     var email = useRef();
@@ -10,19 +13,39 @@ export default function UserForm({allUserData, setAllUserData}) {
 
     const formHandler = (event) => {
         event.preventDefault();
-
+        setFormStatus(true);
         const data = {
             name : name.current.value,
             email : email.current.value,
             mobile_number : mobileNumber.current.value,
         }
 
+        toast.success('Form sumitted successfully.',{
+            position: "bottom-left",
+        });
+
         setAllUserData([data, ...allUserData]);
         event.target.reset();
 
     }
+
+    const closeButton = () => {
+        setFormStatus(false);
+    }
+
     return (
         <>
+            {
+                formStatus
+                ?
+                <div class="bg-success text-white d-flex justify-content-between p-3">
+                    <div>Form submitted successfully.</div>
+                    <button type="button" onClick={ closeButton } class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                :
+                ''
+            }
+            
             <Form autoComplete='off' onSubmit={ formHandler }>
                 <Form.Group className="mb-3" controlId="formBasicName">
                     <Form.Label>Name</Form.Label>
