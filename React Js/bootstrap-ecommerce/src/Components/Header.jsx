@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify'
 
 export default function Header() {
@@ -19,14 +20,14 @@ export default function Header() {
     return (
         <>
             <ToastContainer/>
-            <div className='container-fluid bg-black text-white position-fixed top-0 z-2'>
+            <div className='container-fluid bg-black text-white position-sticky top-0 z-2'>
                 <div className='row'>
                     <div className='col-12'>
                     <nav class="navbar navbar-expand-lg">
                         <div class="container-fluid">
-                            <a class="navbar-brand" href="#">
+                            <Link class="navbar-brand" to="/">
                                 <img src='https://www.wscubetech.com/images/ws-cube-white-logo.svg'/>
-                            </a>
+                            </Link>
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                             </button>
@@ -34,7 +35,7 @@ export default function Header() {
                                 <div className='d-flex justify-content-center m-auto'>
                                     <ul class="navbar-nav justify-content-center me-auto mb-2 mb-lg-0">
                                     <li class="nav-item">
-                                        <a class="nav-link text-white active" aria-current="page" href="#">Home</a>
+                                        <Link class="nav-link text-white active" aria-current="page" to="/">Home</Link>
                                     </li>
 
                                     {
@@ -43,7 +44,7 @@ export default function Header() {
                                                 (i < 6)
                                                 ?
                                                     <li class="nav-item px-3" key={i}>
-                                                        <a class="nav-link text-white" href="#">{ v.name }</a>
+                                                        <Link class="nav-link text-white" to={ `/categories/${v.slug}` }>{ v.name }</Link>
                                                     </li>
                                                 :
                                                 ''
@@ -52,7 +53,7 @@ export default function Header() {
                                     }
 
                                     <li class="nav-item">
-                                        <a class="nav-link text-white" href="#">See All</a>
+                                        <Link class="nav-link text-white" to="/categories">See All</Link>
                                     </li>
                                     
                                 </ul>

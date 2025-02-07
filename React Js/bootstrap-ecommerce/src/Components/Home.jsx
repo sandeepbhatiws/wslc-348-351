@@ -6,7 +6,7 @@ import ProductSection from './ProductSection'
 export default function Home() {
   return (
     <>
-      <Header/>
+      {/* <Header/> */}
 
       <Slider/>
 
