@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import ProductCard from './productCard'
 
-export default function ProductSection({ heading }) {
+export default function ProductSection({ heading, products }) {
 
-    const [products, setProducts] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+
     return (
         <>
             <div className='conatiner-fluid'>
@@ -18,7 +18,7 @@ export default function ProductSection({ heading }) {
                         {
                             products.map((v, i) => {
                                 return (
-                                    <ProductCard key={i} />
+                                    <ProductCard key={i} data={v} />
                                 )
                             })
                         }

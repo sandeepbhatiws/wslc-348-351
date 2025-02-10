@@ -34,9 +34,17 @@ export default function Header() {
                             <div class="collapse justify-content-between navbar-collapse" id="navbarText">
                                 <div className='d-flex justify-content-center m-auto'>
                                     <ul class="navbar-nav justify-content-center me-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <Link class="nav-link text-white active" aria-current="page" to="/">Home</Link>
-                                    </li>
+
+                                    {
+                                        (categories.length > 0)
+                                        ?
+                                        <li class="nav-item">
+                                            <Link class="nav-link text-white active" aria-current="page" to="/">Home</Link>
+                                        </li>
+                                        :
+                                        ''
+                                    }
+                                    
 
                                     {
                                         categories.map((v,i) => {
@@ -52,9 +60,17 @@ export default function Header() {
                                         })
                                     }
 
-                                    <li class="nav-item">
-                                        <Link class="nav-link text-white" to="/categories">See All</Link>
-                                    </li>
+                                    {
+                                        (categories.length > 0)
+                                        ?
+                                        <li class="nav-item">
+                                            <Link class="nav-link text-white" to="/categories">See All</Link>
+                                        </li>
+                                        :
+                                        ''
+                                    }
+
+                                    
                                     
                                 </ul>
                                 </div>

@@ -1,18 +1,23 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default function ProductCard() {
+export default function ProductCard({ data }) {
     return (
         <>
+
             <div className='col-md-3'>
                 <div class="card">
-                    <img src="https://rukminim2.flixcart.com/image/612/612/xif0q/t-shirt/0/y/g/xl-anime-tshirt-for-men-zen1fashion-original-imah3dwrzjgjbyba.jpeg" class="card-img-top" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Men Printed Round Neck Pure Cotton</h5>
-                        <p class="card-text">Rs. 500</p>
-                        <a href="#" class="btn btn-primary">Add To Cart</a>
-                    </div>
+                    <Link to={`/product-details/${data.id}`} className='text-decoration-none text-black'>
+                        <img src={data.image} class="card-img-top" alt="..." />
+                        <div class="card-body">
+                            <h5 class="card-title">{data.name}</h5>
+                            <p class="card-text">Rs. {data.price}</p>
+                            <a href="#" class="btn btn-primary">Add To Cart</a>
+                        </div>
+                    </Link>
                 </div>
             </div>
+
         </>
     )
 }
