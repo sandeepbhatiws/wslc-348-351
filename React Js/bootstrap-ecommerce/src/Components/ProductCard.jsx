@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function ProductCard({ data }) {
+export default function ProductCard({ data, pageName }) {
     return (
         <>
 
-            <div className='col-md-3'>
-                <div class="card">
+            <div className={ (pageName == 'catolag') ? 'col-md-4' : 'col-md-3' }>
+                <div class="card mb-3">
                     <Link to={`/product-details/${data.id}`} className='text-decoration-none text-black'>
                         <img src={data.image} class="card-img-top" alt="..." />
                         <div class="card-body">

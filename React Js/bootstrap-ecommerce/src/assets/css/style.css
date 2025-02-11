@@ -158,3 +158,8 @@ span{font-size:14px;}
    .filter-header{height: 58px;}
    .filter-body{padding-right: 0;}
 }
+
+.filter-options{
+  max-height: 500px;
+    overflow-y: scroll;
+}
