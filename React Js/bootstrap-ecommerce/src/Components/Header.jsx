@@ -1,11 +1,14 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify'
+import { CartContext } from '../Context API/CommonContext';
 
 export default function Header() {
 
     const [categories, setCategories] = useState([]);
+
+    const { cartItems } = useContext(CartContext);
 
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/categories.php')
@@ -79,7 +82,7 @@ export default function Header() {
                             <button type="button" class="btn btn-primary position-relative">
                                 View Cart
                                 <span class="position-absolute top-0 start-100 translate-middle px-1 py-0 bg-danger border border-light rounded-circle">
-                                    10
+                                    { cartItems.length }
                                 </span>
                                 </button>
                             </span>
