@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import ProductDetails from './Components/ProductDetails';
 import RootLayout from './Components/RootLayout';
 import CommonContext from './Context API/CommonContext';
+import Cart from './Components/Cart';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<Home />} />
           <Route path="categories/:slug?" element={<ProductListing />} />
           <Route path="/product-details/:id" element={<ProductDetails />} />
+          <Route path='/view-cart' element={<Cart/>}/>
         </Route>
 
 
