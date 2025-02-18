@@ -5,9 +5,9 @@ export default function Footer() {
         <>
 
 
-            <footer class="bg-white z-10 rounded-lg shadow-sm dark:bg-gray-900">
+            <footer class="bg-white z-10 border-2 rounded-lg shadow-sm dark:bg-gray-900">
                 <div class="w-full max-w-screen-xl mx-auto">
-                    <div class="sm:flex sm:items-center sm:justify-between">
+                    <div class="sm:flex sm:items-center mt-3 sm:justify-between">
                         <a href="/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
                             <img src="https://www.wscubetech.com/images/wscube-tech-logo-2.svg" class="h-16" alt="Flowbite Logo" />
                         </a>
