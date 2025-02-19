@@ -1,13 +1,37 @@
 import React from 'react'
+import { getDatabase, ref, set } from "firebase/database";
+import app from '../config/firebase';
+import { toast } from 'react-toastify';
 
 export default function AddQuiz() {
+
+    const addQuiz = (event) => {
+        event.preventDefault();
+
+        const quizData = {
+            question : event.target.question.value,
+            option_1 : event.target.option_1.value,
+            option_2 : event.target.option_2.value,
+            option_3 : event.target.option_3.value,
+            option_4 : event.target.option_4.value,
+            correct_answer : event.target.correct_answer.value,
+        }
+
+        const db = getDatabase(app);
+        set(ref(db, 'quizes/' + Date.now()), quizData);
+        toast.success('Quiz Added Successfully.')
+
+        event.target.reset();
+
+        console.log(quizData);
+    }
     return (
         <>
             <div className='w-[1320px] mx-auto'>
                 <section class="bg-white dark:bg-gray-900">
                     <div class="py-8 px-4 mx-auto lg:py-16">
                         <h2 class="mb-12 text-xl font-bold text-gray-900 dark:text-white text-center">Add Quiz</h2>
-                        <form action="#" autoComplete='off'>
+                        <form onSubmit={ addQuiz } autoComplete='off'>
                             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                                 <div class="sm:col-span-2">
                                     <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>

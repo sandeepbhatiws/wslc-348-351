@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { ContextData } from '../CommonContext/Context';
+import { ToastContainer } from 'react-toastify';
 
 export default function Header() {
 
@@ -9,6 +10,7 @@ export default function Header() {
 
     return (
         <>
+            <ToastContainer/>
             <Navbar fluid rounded bg-white className='top-0 z-10 sticky border-b border-gray-200 dark:border-gray-600'>
                 <Navbar.Brand className='bg-white'>
                     <Link to="/">
