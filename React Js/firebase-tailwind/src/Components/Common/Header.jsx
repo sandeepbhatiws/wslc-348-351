@@ -1,12 +1,19 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { ContextData } from '../CommonContext/Context';
 import { ToastContainer } from 'react-toastify';
 
 export default function Header() {
 
-    const { isLogin } = useContext(ContextData);
+    const { isLogin, setIsLogin } = useContext(ContextData);
+    const navigate = useNavigate();
+
+    const logout = () => {
+        setIsLogin(false);
+        navigate('/');
+        localStorage.removeItem('loginUser')
+    }
 
     return (
         <>
@@ -38,7 +45,7 @@ export default function Header() {
                                     <Dropdown.Item>Settings</Dropdown.Item>
                                     <Dropdown.Item>Earnings</Dropdown.Item>
                                     <Dropdown.Divider />
-                                    <Dropdown.Item>Sign out</Dropdown.Item>
+                                    <Dropdown.Item onClick={ logout }>Sign out</Dropdown.Item>
                                 </Dropdown>
                                 <Navbar.Toggle />
                             </>

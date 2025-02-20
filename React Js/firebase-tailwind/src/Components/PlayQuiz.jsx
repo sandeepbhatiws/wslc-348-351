@@ -8,7 +8,6 @@ export default function PlayQuiz() {
 
     const navigate = useNavigate();
 
-
     useEffect(() => {
         if(!isLogin){
             navigate('/login');

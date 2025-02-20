@@ -4,7 +4,8 @@ const ContextData = createContext();
 
 export default function Context({ children }) {
 
-    const [isLogin, setIsLogin] = useState(false);
+    const getLoginUserInfo = JSON.parse(localStorage.getItem('loginUser'));    
+    const [isLogin, setIsLogin] = useState((getLoginUserInfo ? true : false));
 
     const data = { isLogin, setIsLogin }
 
