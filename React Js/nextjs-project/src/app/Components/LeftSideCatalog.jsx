@@ -1,6 +1,33 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
-export default function LeftSideCatalog() {
+export default function LeftSideCatalog(filterParams) {
+
+    // console.log(filterParams.filterCategories);
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+
+    useEffect(() => {
+        axios.get('https://wscubetech.co/ecommerce-api/categories.php')
+            .then((response) => {
+                setCategories(response.data.data);
+            })
+            .catch((error) => {
+                toast.error('Something went wrong.')
+            });
+    }, [])
+
+    useEffect(() => {
+        axios.get('https://wscubetech.co/ecommerce-api/brands.php')
+            .then((response) => {
+                setBrands(response.data.data);
+            })
+            .catch((error) => {
+                toast.error('Something went wrong.')
+            });
+    }, [])
+
     return (
         <>
             <section class="hidden w-[300px] flex-shrink-0 px-4 lg:block">
@@ -8,45 +35,21 @@ export default function LeftSideCatalog() {
                     <div class="w-full">
                         <p class="mb-3 font-medium">CATEGORIES</p>
 
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Bedroom</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(12)</p>
-                            </div>
-                        </div>
+                        {
+                            categories.map((v,i) => {
+                                return(
+                                    <div class="flex w-full justify-between" key={i}>
+                                        <div class="flex justify-center items-center">
+                                            <input type="checkbox" id={v.slug}/>
+                                            <label class="ml-4" htmlFor={v.slug}>{v.name}</label>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                        
 
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Sofa</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(15)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Office</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(14)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Outdoor</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(124)</p>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -54,45 +57,18 @@ export default function LeftSideCatalog() {
                     <div class="w-full">
                         <p class="mb-3 font-medium">BRANDS</p>
 
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">APEX</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(12)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Call of SOFA</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(15)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Puff B&G</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(14)</p>
-                            </div>
-                        </div>
-
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">Fornighte</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500">(124)</p>
-                            </div>
-                        </div>
+                        {
+                            brands.map((v,i) => {
+                                return(
+                                    <div class="flex w-full justify-between" key={i}>
+                                        <div class="flex justify-center items-center">
+                                            <input type="checkbox" id={v.slug}/>
+                                            <label class="ml-4" htmlFor={v.slug}>{v.name}</label>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
 

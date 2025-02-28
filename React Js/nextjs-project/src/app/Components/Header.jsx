@@ -1,14 +1,32 @@
 "use client"
+import axios from 'axios';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
 
+  const [getCategories, setGetCategories] = useState([]);
+
   const mobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen)
   }
+
+
+  useEffect(() => {
+    axios.get('https://wscubetech.co/ecommerce-api/categories.php')
+      .then((response) => {
+        setGetCategories(response.data.data);
+      })
+      .catch(() => {
+        toast.error('Something Went Wrong !!')
+      })
+  }, [])
+
+
+
   return (
     <>
       <header
@@ -327,178 +345,51 @@ export default function Header() {
       {/* Desktop Menu Open */}
       <section
         x-show="desktopMenuOpen" onClick={() => setDesktopMenuOpen(false)}
-        class={(desktopMenuOpen) ? 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white' : 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white hidden'}
+        class={(desktopMenuOpen) ? 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white max-h-96 overflow-y-auto' : 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white max-h-96 overflow-y-auto hidden'}
       >
         <div class="mx-auto flex max-w-[1200px] py-10">
           <div class="w-[300px] border-r">
             <ul class="px-5">
-              <li
-                class="active:blue-900 flex items-center gap-2 bg-amber-400 py-2 px-3 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="/images/bed.svg"
-                  alt="Bedroom icon"
-                />
-                Bedroom
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
 
-              <li
-                class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="./images/sleep.svg"
-                  alt="bedroom icon"
-                />
-                Matrass
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
+              {
+                getCategories.map((v, i) => {
+                  return (
+                    <Link key={i} href={ `/catalog/${v.slug}` }>
+                    <li 
+                      class="active:blue-900 flex items-center gap-2 bg-amber-400 py-2 px-3 active:bg-amber-400"
+                    >
+                      
+                        <img
+                          width="15px"
+                          height="15px"
+                          src="/images/bed.svg"
+                          alt={ v.name }
+                        />
+                        { v.name }
+                        <span class="ml-auto"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="h-4 w-4"
+                        >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                            />
+                          </svg>
+                        </span>
+                    </li>
+                    </Link>
+                  )
+                })
+              }
 
-              <li
-                class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="/images/outdoor.svg"
-                  alt="bedroom icon"
-                />
-                Outdoor
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
 
-              <li
-                class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="/images/sofa.svg"
-                  alt="bedroom icon"
-                />
-                Sofa
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
 
-              <li
-                class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="/images/kitchen.svg"
-                  alt="bedroom icon"
-                />
-                Kitchen
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
-
-              <li
-                class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-              >
-                <img
-                  width="15px"
-                  height="15px"
-                  src="/images/food.svg"
-                  alt="Food icon"
-                />
-                Living room
-                <span class="ml-auto"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-4 w-4"
-                >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </span>
-              </li>
             </ul>
           </div>
 

@@ -4,15 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import ProductCard from './ProductCard';
 
-export default function RightSideCatalog() {
-
+export default function RightSideCatalog({filterCategories}) {
+    console.log('Hello');
     const [getProducts, setGetProducts] = useState([]);
 
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/products.php', {
             params: {
-                limit: 15,
-                categories: ''
+                categories : filterCategories.toString()
             }
         })
         .then((result) => {
@@ -21,7 +20,7 @@ export default function RightSideCatalog() {
         .catch(() => {
             toast.error('Something went wrong !!');
         })
-    })
+    },[filterCategories])
     return (
         <>
             <div>

@@ -22,7 +22,7 @@ export default function Home() {
             .catch(() => {
                 toast.error('Something went wrong !!');
             })
-    })
+    },[])
 
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/products.php', {
@@ -37,7 +37,7 @@ export default function Home() {
             .catch(() => {
                 toast.error('Something went wrong !!');
             })
-    })
+    },[])
 
     return (
         <>
