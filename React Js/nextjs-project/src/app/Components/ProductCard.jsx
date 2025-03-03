@@ -14,7 +14,7 @@ export default function ProductCard({product}) {
                     <div
                         class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100"
                     >
-                        <Link href={ `/product-details/${product.id}` }>
+                        <Link href={ `/product-details/${product.category_slug}/${product.id}` }>
                             <span
                                 class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-amber-400"
                             >

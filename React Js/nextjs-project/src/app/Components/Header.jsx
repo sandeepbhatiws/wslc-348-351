@@ -129,7 +129,7 @@ export default function Header() {
           </Link>
 
           <Link
-            href="my-account"
+            href="/my-account"
             class="relative flex cursor-pointer flex-col items-center justify-center"
           >
             <span class="absolute bottom-[33px] right-1 flex h-2 w-2">
