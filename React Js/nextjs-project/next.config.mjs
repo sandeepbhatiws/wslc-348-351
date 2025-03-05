@@ -1,4 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+export default {
+    async rewrites() {
+      return [
+        {
+          source: '/sitemap.xml',
+          destination: '/api/sitemap',
+        },
+      ];
+    },
+};
+  

@@ -1,5 +1,6 @@
 "use client"
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -33,9 +34,9 @@ export default function Header() {
         class="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5"
       >
         <Link href="/">
-          <img
+          <Image
             class="cursor-pointer sm:h-auto sm:w-auto"
-            src="/images/company-logo.svg"
+            src="https://www.wscubetech.com/images/wscube-tech-logo-2.svg" width={100} height={100}
             alt="company logo"
           />
         </Link>
