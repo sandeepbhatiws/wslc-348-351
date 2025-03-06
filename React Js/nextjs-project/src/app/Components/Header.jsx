@@ -3,6 +3,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export default function Header() {
@@ -27,6 +28,7 @@ export default function Header() {
   }, [])
 
 
+  const cartItems = useSelector((cart) => cart.allCartValues.cartItems); 
 
   return (
     <>
@@ -126,7 +128,7 @@ export default function Header() {
               />
             </svg>
 
-            <p class="text-xs">Cart</p>
+            <p class="text-xs">Cart ({ cartItems.length })</p>
           </Link>
 
           <Link

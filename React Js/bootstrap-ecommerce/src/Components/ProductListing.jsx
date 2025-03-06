@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import ProductCard from './productCard';
+import ProductCard from './ProductCard';
 import { useParams } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination';
 
