@@ -4,11 +4,15 @@ import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import ProductCard from './ProductCard';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../Redux Toolkit/CartSlice';
 
 export default function ProductDetails() {
 
     const params = useParams();
     const [productDetails, setProductDetails] = useState('');
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         axios(`https://wscubetech.co/ecommerce-api/productdetails.php?id=${params.id[1]}`)
@@ -273,7 +277,7 @@ export default function ProductDetails() {
                                 </div>
 
                                 <div class="mt-7 flex flex-row items-center gap-6">
-                                    <button
+                                    <button onClick={ () => dispatch(addToCart(productDetails)) }
                                         class="flex h-12 w-1/3 items-center justify-center bg-violet-900 text-white duration-100 hover:bg-blue-800"
                                     >
                                         <svg
