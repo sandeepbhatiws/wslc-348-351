@@ -1,13 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteCart, updateCart } from '../Redux Toolkit/CartSlice';
 
 export default function ViewCart() {
 
     const cartItems = useSelector((cart) => cart.allCartValues.cartItems)
 
     const [totalAmount, setTotalAmount] = useState(0);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         var sum = 0;
@@ -333,7 +336,7 @@ export default function ViewCart() {
                                             <td class="mx-auto text-center">&#36;{v.price}</td>
                                             <td class="align-middle">
                                                 <div class="flex items-center justify-center">
-                                                    <button
+                                                    <button onClick={ () => dispatch(updateCart({ id : v.id, type: 'minus', stock: v.stock})) }
                                                         class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                                     >
                                                         &minus;
@@ -343,7 +346,7 @@ export default function ViewCart() {
                                                     >
                                                         {v.quantity}
                                                     </div>
-                                                    <button
+                                                    <button onClick={ () => dispatch(updateCart({ id : v.id, type: 'plus', stock: v.stock})) }
                                                         class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                                     >
                                                         &#43;
@@ -352,7 +355,7 @@ export default function ViewCart() {
                                             </td>
                                             <td class="mx-auto text-center">&#36;{v.price * v.quantity}</td>
                                             <td class="align-middle">
-                                                <svg
+                                                <svg onClick={ () => dispatch(deleteCart(v.id)) }
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
