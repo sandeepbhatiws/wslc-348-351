@@ -1,19 +1,30 @@
 const express = require('express');
 const mongodb = require('mongodb');
+const bodyParser = require('body-parser');
 const dbConnection = require('./config/database.js');
 
 const server = express();   //To Create Exucatable Function 
+
+// parse requests of content-type - application/json
+server.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+server.use(express.urlencoded({ extended: true }));
+
+server.use(bodyParser.json());
+
+server.use(cors());
 
 server.get('/',(request,response) => {
     response.send('Server is working fine.');
 })
 
-server.get('/add-color',async (request,response) => {
+server.post('/add-color',async (request,response) => {
 
     const db = await dbConnection();
     const insertRecord = await db.collection('colors').insertOne({
-        name : request.query.name,
-        code : request.query.code,
+        name : request.body.name,
+        code : request.body.code,
     });
 
     const result = {
@@ -25,7 +36,7 @@ server.get('/add-color',async (request,response) => {
     response.send(result);
 })
 
-server.get('/view-colors',async(request,response) => {
+server.post('/view-colors',async(request,response) => {
     const db = await dbConnection();
     const getRecords = await db.collection('colors').find().toArray();
 
@@ -46,14 +57,14 @@ server.get('/view-colors',async(request,response) => {
     }
 })
 
-server.get('/edit-color',async(request,response) => {
+server.put('/edit-color/:id',async(request,response) => {
     const db = await dbConnection();
     const updatedRecord = await db.collection('colors').updateOne({
-        _id : new mongodb.ObjectId(request.query.id)
+        _id : new mongodb.ObjectId(request.params.id)
     },{
         $set : {
-            name : request.query.name,
-            code : request.query.code,
+            name : request.body.name,
+            code : request.body.code,
         }
     });
 
@@ -66,11 +77,11 @@ server.get('/edit-color',async(request,response) => {
     response.send(result);
 })
 
-server.get('/color-details',async(request,response) => {
+server.post('/color-details',async(request,response) => {
     const db = await dbConnection();
     const getRecords = await db.collection('colors').findOne(
     { 
-        _id : new mongodb.ObjectId(request.query.id) 
+        _id : new mongodb.ObjectId(request.body.id) 
     });
 
     if(getRecords){
@@ -90,12 +101,11 @@ server.get('/color-details',async(request,response) => {
     }
 })
 
-server.get('/color-delete',async(request,response) => {
+server.delete('/color-delete/:id',async(request,response) => {
 
-    
     const db = await dbConnection();
     const deleteRecord = await db.collection('colors').deleteOne({
-        _id : new mongodb.ObjectId(request.query.id)
+        _id : new mongodb.ObjectId(request.params.id)
     });
 
     const result = {
