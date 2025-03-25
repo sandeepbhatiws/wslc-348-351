@@ -1,6 +1,7 @@
 const express = require('express');
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const dbConnection = require('./config/database.js');
 
 const server = express();   //To Create Exucatable Function 
