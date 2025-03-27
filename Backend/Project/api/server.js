@@ -2,6 +2,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const server = express();   //To Create Exucatable Function 
 
@@ -19,10 +20,21 @@ server.get('/',(request,response) => {
     response.send('Server is working fine.');
 })
 
+// Admin URLS
+require('./app/routes/admin/default.routes.js')(server);
+
+
+
 server.get('*',(request,response) => {
     response.send('page not found.');
 })
 
-server.listen(5000,() => {
-    console.log('Server is working fine.');
-})
+mongoose.connect('mongodb://127.0.0.1:27017/ecommerce_online').then(() => {
+    server.listen(5000,() => {
+        console.log('Server is working fine.');
+    })
+}).catch(() => {
+    console.log('Database Connection Error !!');
+});
+
+
