@@ -5,6 +5,8 @@ exports.create = async(request,response) => {
     
     var dataSave = {
         name : request.body.name,
+        type : request.body.type,
+        email : request.body.email,
         order : request.body.order,
     }
     
@@ -18,6 +20,55 @@ exports.create = async(request,response) => {
     
         response.send(result);
     })
+    .catch((error) => {
+        console.log(error);
+
+        var error_messages = [];
+        var errorKey ={};
+
+        for(var data in error.errors){
+            console.log(error.errors[data].properties.message);
+
+            // error_messages.push(error.errors[data].properties.message);
+
+            errorKey[data] = error.errors[data].properties.message;
+            error_messages.push(errorKey);
+        }
+
+        const result = {
+            _status : false,
+            _message : 'Something went wrong !!',
+            error_messages : error_messages,
+            _data :  null
+        }
+    
+        response.send(result);
+    })
+}
+
+//  For View Data
+exports.view = async(request,response) => {
+    await defaultSchema.find()
+    .then((resp) => {
+        if(resp.length > 0){
+            const result = {
+                _status : true,
+                _message : 'Record inserted succussfully',
+                _data :  resp
+            }
+        
+            response.send(result);
+        } else {
+            const result = {
+                _status : false,
+                _message : 'No record found.',
+                _data :  []
+            }
+        
+            response.send(result);
+        }
+        
+    })
     .catch(() => {
         const result = {
             _status : false,
@@ -27,13 +78,6 @@ exports.create = async(request,response) => {
     
         response.send(result);
     })
-
-    
-}
-
-//  For View Data
-exports.view = (request,response) => {
-
 }
 
 //  For Details Data
