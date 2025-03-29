@@ -1,4 +1,5 @@
 const defaultSchema = require('../../models/default');
+const mongodb = require('mongodb');
 
 //  For Create Data
 exports.create = async(request,response) => {
@@ -48,7 +49,44 @@ exports.create = async(request,response) => {
 
 //  For View Data
 exports.view = async(request,response) => {
-    await defaultSchema.find()
+    
+    const condition = {
+        deleted_at : null,
+    }
+
+    if(request.body.name != '' && request.body.name != undefined){
+        // var nameRegex = new RegExp("^" + request.body.name);
+        var nameRegex = new RegExp(request.body.name,"i");
+        condition.name = nameRegex
+    }
+    
+    // await defaultSchema.find(condition).select('name status order')
+    // .sort({
+    //     order : 'asc',
+    //     _id : 'desc'
+    // })
+
+
+    // await defaultSchema.findOne({ _id : '67e6c0df8db5c9f380fd1266' })
+
+    // await defaultSchema.findById('67e6c0df8db5c9f380fd1266')
+    // await defaultSchema.find({ order: { $gt: 9 } })
+
+    var limit = 4;
+    var skip = 0;
+    var page = 1;
+
+    if(request.body.page != '' && request.body.page != undefined){
+        page = request.body.page;
+    }
+
+    skip = (page - 1) * limit;
+
+    // await defaultSchema.find(condition).limit(limit).skip(skip)
+
+    // Model.find({role: { $exists: true } });
+
+    await defaultSchema.find({ name : { $type : 8 } })
     .then((resp) => {
         if(resp.length > 0){
             const result = {
@@ -96,6 +134,33 @@ exports.changeStatus = (request,response) => {
 }
 
 //  For Delete Data
-exports.destroy = (request,response) => {
+exports.destroy = async(request,response) => {
 
+    await defaultSchema.updateOne(
+        {
+            _id : request.body.id
+        },
+        {
+            $set : {
+                deleted_at : Date.now()
+            }
+        }
+    ).then((result) => {
+        const data = {
+            _status : true,
+            _message : 'Record updated succussfully',
+            _data :  result
+        }
+    
+        response.send(data);
+
+    }).catch((error) => {
+        const data = {
+            _status : false,
+            _message : 'Something went wrong !!',
+            _data :  ''
+        }
+    
+        response.send(data);
+    })
 }
