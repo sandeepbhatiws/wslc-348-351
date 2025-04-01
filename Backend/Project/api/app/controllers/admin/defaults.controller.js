@@ -4,6 +4,16 @@ const mongodb = require('mongodb');
 //  For Create Data
 exports.create = async(request,response) => {
     
+    const result = {
+        _status : true,
+        _message : 'Record inserted succussfully',
+        _data :  request.files,
+        body :  request.body,
+    }
+
+    response.send(result);
+
+
     var dataSave = {
         name : request.body.name,
         type : request.body.type,
