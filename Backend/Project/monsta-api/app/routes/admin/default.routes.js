@@ -32,9 +32,9 @@ module.exports = server => {
 
     router.put('/update/:id', upload.none(), update);
 
-    router.put('/change-status', upload.none(), changeStatus);
+    router.post('/change-status', upload.none(), changeStatus);
 
-    router.put('/delete', upload.none(), destroy);
+    router.post('/delete', upload.none(), destroy);
 
     server.use('/api/admin/defaults', router);
 }

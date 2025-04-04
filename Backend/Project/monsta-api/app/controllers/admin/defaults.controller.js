@@ -101,26 +101,132 @@ exports.view = async(request,response) => {
 }
 
 //  For Details Data
-exports.details = (request,response) => {
+exports.details = async (request,response) => {
 
+    await defaultSchema.findOne({
+        deleted_at : null,
+        _id : request.params.id
+    })
+    .then((resp) => {
+        if(resp){
+            const result = {
+                _status : true,
+                _message : 'Record fetch succussfully',
+                _data :  resp
+            }
+        
+            response.send(result);
+        } else {
+            const result = {
+                _status : false,
+                _message : 'No record found.',
+                _data :  []
+            }
+        
+            response.send(result);
+        }
+        
+    })
+    .catch(() => {
+        const result = {
+            _status : false,
+            _message : 'Something went wrong !!',
+            _data :  null
+        }
+    
+        response.send(result);
+    })
 }
 
 //  For Update Data
-exports.update = (request,response) => {
+exports.update = async(request,response) => {
+
+    var dataSave = {
+        name : request.body.name,
+        order : request.body.order,
+    }
+    
+    await defaultSchema.updateOne({
+        _id : request.params.id
+    },
+    {
+        $set : dataSave
+    })
+    .then((resp) => {
+        const result = {
+            _status : true,
+            _message : 'Record updated succussfully',
+            _data :  resp
+        }
+    
+        response.send(result);
+    })
+    .catch((error) => {
+        var error_messages = [];
+        var errorKey = {};
+
+        for(var data in error.errors){
+            errorKey[data] = error.errors[data].properties.message;
+            error_messages.push(errorKey);
+        }
+
+        const result = {
+            _status : false,
+            _message : 'Something went wrong !!',
+            error_messages : error_messages,
+            _data :  null
+        }
+    
+        response.send(result);
+    })
 
 }
 
 //  For Change Status Data
-exports.changeStatus = (request,response) => {
+exports.changeStatus = async(request,response) => {
+    await defaultSchema.updateMany(
+        {
+            _id : {
+                $in : request.body.ids
+            }
+        },
+        [
+            { 
+                $set: { 
+                    status: { 
+                        $not: "$status" 
+                    } 
+                } 
+            }
+        ]
+    ).then((result) => {
+        const data = {
+            _status : true,
+            _message : 'Change Status succussfully',
+            _data :  result
+        }
+    
+        response.send(data);
 
+    }).catch((error) => {
+        const data = {
+            _status : false,
+            _message : 'Something went wrong !!',
+            _data :  ''
+        }
+    
+        response.send(data);
+    })
 }
 
 //  For Delete Data
 exports.destroy = async(request,response) => {
 
-    await defaultSchema.updateOne(
+    await defaultSchema.updateMany(
         {
-            _id : request.body.id
+            _id : {
+                $in : request.body.ids
+            }
         },
         {
             $set : {
@@ -130,7 +236,7 @@ exports.destroy = async(request,response) => {
     ).then((result) => {
         const data = {
             _status : true,
-            _message : 'Record updated succussfully',
+            _message : 'Record deleted succussfully',
             _data :  result
         }
     
