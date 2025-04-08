@@ -6,10 +6,12 @@ import Breadcrumb from '../common/Breadcrumb'
 import Footer from '../common/Footer'
 // import { DashboardItems } from '../Pages/Dashboard'
 import { Outlet } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 export default function RootLayout() {
   return (
     <section className="w-full">
+      <ToastContainer/>
       <div className="grid grid-cols-[16.5%_auto]">
         <div>
           <Sidebar />

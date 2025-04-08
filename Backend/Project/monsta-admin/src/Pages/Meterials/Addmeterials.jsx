@@ -2,9 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Breadcrumb from "../../common/Breadcrumb";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Addmaterials() {
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -13,7 +17,19 @@ export default function Addmaterials() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+
+    axios.post('http://localhost:5000/api/admin/materials/create', data)
+    .then((response) => {
+      if(response.data._status == true){
+        toast.success(response.data._message);
+        navigate('/material/view');
+      } else {
+        toast.error(response.data._message);
+      }        
+    })
+    .catch((error) => {
+        toast.error('Something went wrong !!')
+    });
   };
 
   // update work
@@ -46,16 +62,16 @@ export default function Addmaterials() {
                     htmlFor="Name"
                     className="block  text-md font-medium text-gray-900"
                   >
-                    Category Name
+                    Material Name
                   </label>
                   <input
                     type="text"
-                    {...register("Name", { required: "Material name is required" })}
+                    {...register("name", { required: "Material name is required" })}
                     id="Name"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Material Name"
                   />
-                  {errors.Name && <p className="text-red-500">{errors.Name.message}</p>}
+                  {errors.name && <p className="text-red-500">{errors.name.message}</p>}
                 </div>
                 <div className="mb-5">
                   <label
