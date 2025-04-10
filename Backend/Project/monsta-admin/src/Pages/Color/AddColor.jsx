@@ -1,37 +1,88 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ChromePicker } from "react-color";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AddColor() {
+  const [colorDetails, setColorDetails] = useState('');
   const [color, setColor] = useState("#000000");
-  const { id: updateId } = useParams();
-  const updateIdState = Boolean(updateId);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
-  useEffect(() => {
-    if (updateIdState) {
-      // Fetch existing data if it's an update case (You can replace this with an API call)
-      setValue("colorName", "Sample Color");
-      setValue("colorOrder", 1);
-      setColor("#ff5733");
-    }
-  }, [updateIdState, setValue]);
+  const navigate = useNavigate();
 
   const handleColorChange = (newColor) => {
     setColor(newColor.hex);
   };
 
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const onSubmit = (data) => {
-    console.log("Form Data:", { ...data, color });
-    alert(`${updateIdState ? "Color Updated" : "Color Added"}: ${data.colorName} - ${color}`);
+    data.color_code = color;
+
+    if(updateIdState){
+      axios.put(`http://localhost:5000/api/admin/colors/update/${updateId}`, data)
+    .then((response) => {
+      if(response.data._status == true){
+        toast.success(response.data._message);
+        navigate('/color/view');
+      } else {
+        toast.error(response.data._message);
+      }        
+    })
+    .catch((error) => {
+        toast.error('Something went wrong !!')
+    });
+    } else {
+      axios.post('http://localhost:5000/api/admin/colors/create', data)
+      .then((response) => {
+        if(response.data._status == true){
+          toast.success(response.data._message);
+          navigate('/color/view');
+        } else {
+          toast.error(response.data._message);
+        }        
+      })
+      .catch((error) => {
+          toast.error('Something went wrong !!')
+      });
+    }
+    
   };
+
+  // update work
+  const [updateIdState,setUpdateIdState]=useState(false)
+
+  let updateId=useParams().id
+  useEffect(()=>{
+    if(updateId==undefined){
+      setUpdateIdState(false)
+    } else{
+      setUpdateIdState(true)
+
+      axios.post(`http://localhost:5000/api/admin/colors/details/${ updateId }`)
+      .then((response) => {
+        if(response.data._status == true){
+          setColorDetails(response.data._data);
+          setValue('name', response.data._data.name);
+          setValue('order', response.data._data.order);
+          setColor(response.data._data.color_code)
+        } else {
+          toast.error(response.data._message);
+        }        
+      })
+      .catch((error) => {
+          toast.error('Something went wrong !!')
+      });
+      
+    }
+  },[updateId])
 
   return (
     <div className="w-full">
@@ -41,6 +92,7 @@ export default function AddColor() {
         </h3>
 
         <form
+          autoComplete="off"
           className="p-3 border border-t-0 rounded-b-md border-slate-400"
           onSubmit={handleSubmit(onSubmit)}
         >
@@ -49,16 +101,18 @@ export default function AddColor() {
             <label className="block text-md font-medium text-gray-900">Color Name</label>
             <input
               type="text"
-              {...register("colorName", { required: "Color Name is required" })}
+              defaultValue={colorDetails.name}
+              {...register("name", { required: "Color Name is required" })}
               className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
               placeholder="Enter Color Name"
             />
-            {errors.colorName && <p className="text-red-500 text-sm">{errors.colorName.message}</p>}
+            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
           {/* Color Picker */}
           <div className="mb-5">
             <label className="block text-md font-medium text-gray-900">Color Picker</label>
+             
             <div className="flex items-center gap-3">
               <ChromePicker color={color} onChange={handleColorChange} />
               <div className="w-10 h-10 border border-gray-400 rounded-md" style={{ backgroundColor: color }}></div>
@@ -70,14 +124,15 @@ export default function AddColor() {
             <label className="block text-md font-medium text-gray-900">Order</label>
             <input
               type="number"
-              {...register("colorOrder", {
+              defaultValue={colorDetails.order}
+              {...register("order", {
                 required: "Order is required",
                 min: { value: 1, message: "Order must be at least 1" },
               })}
               className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
               placeholder="Enter Order"
             />
-            {errors.colorOrder && <p className="text-red-500 text-sm">{errors.colorOrder.message}</p>}
+            {errors.order && <p className="text-red-500 text-sm">{errors.order.message}</p>}
           </div>
 
           {/* Submit Button */}

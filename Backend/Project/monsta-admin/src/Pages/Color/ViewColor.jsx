@@ -135,17 +135,10 @@ export default function ViewCategory() {
                         </Link>
                       </td>
                     </tr>
-
-
-
-
                   </tbody>
                 </table>
               </div>
-
-
             </div>
-
           </div>
         </div>
       </div>

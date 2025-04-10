@@ -63,6 +63,8 @@ exports.view = async(request,response) => {
         var nameRegex = new RegExp(request.body.name,"i");
         condition.name = nameRegex;
     }
+
+    var totalRecords = await materialSchema.find(condition).select('name status order').countDocuments();
     
     await materialSchema.find(condition).select('name status order')
     .limit(limit).skip(skip)
@@ -74,6 +76,8 @@ exports.view = async(request,response) => {
             const result = {
                 _status : true,
                 _message : 'Record inserted succussfully',
+                'total_records' : totalRecords,
+                'total_pages' : Math.ceil(totalRecords / limit),
                 _data :  resp
             }
         

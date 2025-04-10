@@ -8,28 +8,102 @@ import { MdFilterAltOff, MdModeEdit } from 'react-icons/md'
 import { FaFilter } from 'react-icons/fa'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { Pagination } from "flowbite-react";
 
 export default function ViewMeterials() {
     let [activeFilter, setactiveFilter] = useState(true);
-
     let [filterName, setFilterName] = useState('');
-
     var [materails, setMaterials] = useState([]);
+    let [checkBoxValues, setCheckBoxValues] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [apiStatus, setApiStatus] = useState(true);
+
+    const onPageChange = (page) => setCurrentPage(page);
+
 
     useEffect(() => {
-        axios.post('http://localhost:5000/api/admin/materials/view',{
-            name : filterName
+        axios.post('http://localhost:5000/api/admin/materials/view', {
+            name: filterName
         })
             .then((response) => {
                 setMaterials(response.data._data);
+                setTotalPages(response.data.total_pages);
             })
             .catch((error) => {
                 toast.error('Something went wrong !!')
             });
-    }, [filterName]);
+    }, [filterName, apiStatus]);
 
     const filter = (event) => {
         setFilterName(event.target.value);
+    }
+
+    const selectCheckBox = (id) => {
+        if (checkBoxValues.includes(id)) {
+            var data = checkBoxValues.filter((v) => {
+                if (v != id) {
+                    return v;
+                }
+            })
+
+            data = [...data];
+            setCheckBoxValues(data);
+
+        } else {
+            var data = [...checkBoxValues, id];
+            setCheckBoxValues(data);
+        }
+    }
+
+    const selectAllCheckBox = (event) => {
+
+        if (event.target.checked) {
+            var data = materails.map((v) => {
+                return v._id;
+            })
+
+            data = [...data];
+            setCheckBoxValues(data);
+
+        } else {
+            setCheckBoxValues([]);
+        }
+
+    }
+
+    const changeStatus = () => {
+        if(checkBoxValues.length > 0){
+            if(confirm('Are you sure you want to change status ?')){
+                axios.post('http://localhost:5000/api/admin/materials/change-status', {
+                    ids: checkBoxValues
+                })
+                .then((response) => {
+                    setCheckBoxValues([]);
+                    setApiStatus(!apiStatus)
+                })
+                .catch((error) => {
+                    toast.error('Something went wrong !!')
+                });
+            }
+        }
+    }
+
+    const deleteRecord = () => {
+        if(checkBoxValues.length > 0){
+            if(confirm('Are you sure you want to delete ?')){
+                axios.post('http://localhost:5000/api/admin/materials/delete', {
+                    ids: checkBoxValues
+                })
+                .then((response) => {
+                    setCheckBoxValues([]);
+                    setApiStatus(!apiStatus)
+                })
+                .catch((error) => {
+                    toast.error('Something went wrong !!')
+                });
+            }
+        }
     }
 
     return (
@@ -42,7 +116,7 @@ export default function ViewMeterials() {
 
                         <form className="flex max-w-sm">
                             <div className="relative w-full">
-                                <input onKeyUp={ filter }
+                                <input onKeyUp={filter}
                                     type="text"
                                     id="simple-search"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -86,8 +160,8 @@ export default function ViewMeterials() {
                                         {activeFilter ? <FaFilter className='text-[18px]' /> : <MdFilterAltOff className='text-[18px]' />}
                                     </div>
 
-                                    <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"> Change Status</button>
-                                    <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete </button>
+                                    <button type="button" onClick={ changeStatus } class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"> Change Status</button>
+                                    <button type="button" onClick={ deleteRecord }  className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete </button>
                                 </div>
                             </div>
                             <div className="border border-t-0 rounded-b-md border-slate-400">
@@ -103,7 +177,11 @@ export default function ViewMeterials() {
                                                 <tr>
                                                     <th scope="col" class="p-4">
                                                         <div class="flex items-center">
-                                                            <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                            <input id="checkbox-all-search"
+                                                                onChange={selectAllCheckBox}
+                                                                value={1}
+                                                                checked={checkBoxValues.length == materails.length ? 'checked' : ''}
+                                                                type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                             <label for="checkbox-all-search" class="sr-only">checkbox</label>
                                                         </div>
                                                     </th>
@@ -128,38 +206,53 @@ export default function ViewMeterials() {
                                                     (materails.length > 0)
                                                         ?
                                                         materails.map((v, i) => {
-                                                            return(
-                                                            <tr key={i} class="bg-white  dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                                <td class="w-4 p-4">
-                                                                    <div class="flex items-center">
-                                                                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                                    </div>
-                                                                </td>
-                                                                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                                            return (
+                                                                <tr key={i} class="bg-white  dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                    <td class="w-4 p-4">
+                                                                        <div class="flex items-center">
+                                                                            <input onClick={() => selectCheckBox(v._id)}
 
-                                                                    <div class="py-4">
-                                                                        <div class="text-base font-semibold">{ v.name }</div>
+                                                                                checked={checkBoxValues.includes(v._id) ? 'checked' : ''}
 
-                                                                    </div>
-                                                                </th>
 
-                                                                <td class="px-6 py-4">
-                                                                    { v.order }
-                                                                </td>
-                                                                <td class=" py-4">
-
-                                                                    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
-                                                                </td>
-                                                                <td class=" py-4">
-
-                                                                    <Link to={`/material/update/${123}`} >
-                                                                        <div className="rounded-[50%] w-[40px] h-[40px] flex items-center justify-center text-white bg-blue-700  border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                                            <MdModeEdit className='text-[18px]' />
+                                                                                id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                                                                         </div>
-                                                                    </Link>
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+
+                                                                        <div class="py-4">
+                                                                            <div class="text-base font-semibold">{v.name}</div>
+
+                                                                        </div>
+                                                                    </th>
+
+                                                                    <td class="px-6 py-4">
+                                                                        {v.order}
+                                                                    </td>
+                                                                    <td class=" py-4">
+
+                                                                        {
+                                                                            v.status
+                                                                                ?
+                                                                                <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
+                                                                                :
+                                                                                <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Deactive</button>
+                                                                        }
+
+
+
+
+                                                                    </td>
+                                                                    <td class=" py-4">
+
+                                                                        <Link to={`/material/update/${v._id}`} >
+                                                                            <div className="rounded-[50%] w-[40px] h-[40px] flex items-center justify-center text-white bg-blue-700  border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                                                <MdModeEdit className='text-[18px]' />
+                                                                            </div>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
                                                             )
                                                         })
 
@@ -177,10 +270,22 @@ export default function ViewMeterials() {
                                         </table>
                                     </div>
 
-
                                 </div>
 
+
+
                             </div>
+
+                            {
+                                totalPages > 1
+                                    ?
+                                    <div className="flex overflow-x-auto sm:justify-center">
+                                        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+                                    </div>
+                                    :
+                                    ''
+                            }
+
                         </div>
                     </div>
                 </div>

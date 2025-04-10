@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "flowbite-react patch"
   },
   "dependencies": {
     "axios": "^1.8.4",
     "dropify": "^0.2.2",
+    "flowbite-react": "^0.11.7",
     "react": "^18.3.1",
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
