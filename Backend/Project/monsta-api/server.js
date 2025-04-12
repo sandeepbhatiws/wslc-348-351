@@ -20,10 +20,14 @@ server.get('/',(request,response) => {
     response.send('Server is working fine.');
 })
 
+server.use('/uploads/categories', express.static('./uploads/categories'));
+server.use('/uploads/products', express.static('./uploads/products'));
+
 // Admin Routes URLS
 require('./app/routes/admin/default.routes.js')(server);
 require('./app/routes/admin/material.routes.js')(server);
 require('./app/routes/admin/color.routes.js')(server);
+require('./app/routes/admin/parentCategories.routes.js')(server);
 
 
 // Website Routes URL
