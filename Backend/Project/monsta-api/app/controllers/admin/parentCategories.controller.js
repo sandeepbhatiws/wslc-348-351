@@ -1,11 +1,33 @@
 const parentCategoriesSchema = require('../../models/parentCategories');
 const mongodb = require('mongodb');
+const slugify = require("slugify");
+
+const generateUniqueSlug = async (Model, baseSlug) => {
+    let slug = baseSlug;
+    let count = 0;
+  
+    // Loop to find unique slug
+    while (await Model.findOne({ slug })) {
+      count++;
+      slug = `${baseSlug}-${count}`;
+    }
+  
+    return slug;
+};
 
 //  For Create Data
 exports.create = async(request,response) => {
 
+    var slug = slugify(request.body.name,{
+        lower : true,
+        strict : true,
+    });
+
+    slug = await generateUniqueSlug(parentCategoriesSchema, slug);
+
     var dataSave = {
         name : request.body.name,
+        slug : slug,
         order : request.body.order,
     }
 

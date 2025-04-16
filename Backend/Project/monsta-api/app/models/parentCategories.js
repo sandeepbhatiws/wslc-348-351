@@ -10,6 +10,10 @@ const schema = new mongoose.Schema({
         type : String,
         default:  '',
     },
+    slug : {
+        type : String,
+        default:  '',
+    },
     status : {
         type : Boolean,
         default : true

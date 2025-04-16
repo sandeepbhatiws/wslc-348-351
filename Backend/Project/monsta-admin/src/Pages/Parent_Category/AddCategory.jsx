@@ -9,28 +9,62 @@ import axios, { toFormData } from "axios";
 import { toast } from "react-toastify";
 
 export default function AddCategory() {
+  const [imagePath,  setImagePath] = useState('');
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  
   useEffect(() => {
-    $(".dropify").dropify({
-      messages: {
-        default: "Drag and drop ",
-        replace: "Drag and drop ",
-        remove: "Remove",
-        error: "Oops, something went wrong"
+    // $(".dropify").dropify({
+    //   messages: {
+    //     default: "Drag and drop ",
+    //     replace: "Drag and drop ",
+    //     remove: "Remove",
+    //     error: "Oops, something went wrong"
+    //   }
+    // });
+
+    const dropifyElement = $("#categoryImage");
+
+    if (dropifyElement.data("dropify")) {
+      dropifyElement.data("dropify").destroy();
+      dropifyElement.removeData("dropify");
+    }
+
+    // **Force Update Dropify Input**
+    dropifyElement.replaceWith(
+      `<input type="file" accept="image/*" name="image" id="categoryImage"
+        class="dropify" data-height="250" data-default-file="${imagePath}"/>`
+    );
+
+    // **Reinitialize Dropify**
+    $("#categoryImage").dropify();
+
+    // **Update React Hook Form when File Changes**
+    $("#categoryImage").on("change", function (event) {
+      
+      if (event.target.files.length > 0) {
+        console.log(event.target.files[0]);
+        setValue("image", event.target.files[0]); // ✅ Sync React Hook Form
       }
     });
-  }, []);
+
+
+  }, [imagePath]);
 
   const navigate = useNavigate();
   const [categoryDetails, setCategoryDetails] = useState('');
+  // const [imagePath,  setImagePath] = useState('');
 
-  const {
-      register,
-      setValue,
-      handleSubmit,
-      formState: { errors },
-    } = useForm();
+  
 
   const onSubmit = (data) => {
+
+    console.log(data);
 
 
     if(data.image){
@@ -42,7 +76,7 @@ export default function AddCategory() {
     .then((response) => {
       if(response.data._status == true){
         toast.success(response.data._message);
-        navigate('/category/view');
+        // navigate('/category/view');
       } else {
         toast.error(response.data._message);
       }        
@@ -81,6 +115,9 @@ export default function AddCategory() {
           setCategoryDetails(response.data._data);
           setValue('name', response.data._data.name);
           setValue('order', response.data._data.order);
+          setImagePath(response.data.image_path+response.data._data.image);
+
+          console.log(imagePath);
         } else {
           toast.error(response.data._message);
         }        
@@ -136,8 +173,9 @@ export default function AddCategory() {
                 <input
                   type="file"
                   accept="image/*"
-                  {...register("image", { required: "Category image is required" })}
+                  // {...register("image", { required: "Category image is required" })}
                   id="categoryImage"
+                  data-default-file={imagePath}
                   className="dropify"
                   data-height="250"
                 />
