@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 export default function AddCategory() {
   const [imagePath,  setImagePath] = useState('');
+  const [imageValue,  setImageValue] = useState('');
 
   const {
     register,
@@ -49,7 +50,7 @@ export default function AddCategory() {
       
       if (event.target.files.length > 0) {
         console.log(event.target.files[0]);
-        setValue("image", event.target.files[0]); // ✅ Sync React Hook Form
+        setImageValue(event.target.files[0]); // ✅ Sync React Hook Form
       }
     });
 
@@ -64,19 +65,18 @@ export default function AddCategory() {
 
   const onSubmit = (data) => {
 
-    console.log(data);
-
-
-    if(data.image){
-      data.image = data.image[0]
+    if(imageValue){
+      data.image = imageValue
     }
+
+    console.log(data);
 
     if(updateIdState){
       axios.put(`http://localhost:5000/api/admin/parent-categories/update/${updateId}`, toFormData(data))
     .then((response) => {
       if(response.data._status == true){
         toast.success(response.data._message);
-        // navigate('/category/view');
+        navigate('/category/view');
       } else {
         toast.error(response.data._message);
       }        
@@ -175,6 +175,7 @@ export default function AddCategory() {
                   accept="image/*"
                   // {...register("image", { required: "Category image is required" })}
                   id="categoryImage"
+                  name="image"
                   data-default-file={imagePath}
                   className="dropify"
                   data-height="250"

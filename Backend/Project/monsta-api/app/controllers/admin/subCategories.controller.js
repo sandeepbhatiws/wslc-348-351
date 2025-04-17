@@ -1,4 +1,4 @@
-const parentCategoriesSchema = require('../../models/parentCategories');
+const subCategoriesSchema = require('../../models/subCategories');
 const mongodb = require('mongodb');
 const slugify = require("slugify");
 
@@ -23,10 +23,11 @@ exports.create = async(request,response) => {
         strict : true,
     });
 
-    slug = await generateUniqueSlug(parentCategoriesSchema, slug);
+    slug = await generateUniqueSlug(subCategoriesSchema, slug);
 
     var dataSave = {
         name : request.body.name,
+        parent_category_id : request.body.parent_category_id,
         slug : slug,
         order : request.body.order,
     }
@@ -35,7 +36,7 @@ exports.create = async(request,response) => {
         dataSave.image = request.file.filename;
     }
     
-    await new parentCategoriesSchema(dataSave).save()
+    await new subCategoriesSchema(dataSave).save()
     .then((resp) => {
         const result = {
             _status : true,
@@ -94,11 +95,9 @@ exports.view = async(request,response) => {
         condition.name = nameRegex;
     }
 
-    var totalRecords = await parentCategoriesSchema.find(condition).select('name status order').countDocuments();
-
-    console.log(request.port);
-    
-    await parentCategoriesSchema.find(condition).select('name image status order')
+    var totalRecords = await subCategoriesSchema.find(condition).select('name parent_category_id status order').countDocuments();
+ 
+    await subCategoriesSchema.find(condition).select('name parent_category_id image status order')
     .limit(limit).skip(skip)
     .sort({
         _id : 'desc'
@@ -140,7 +139,7 @@ exports.view = async(request,response) => {
 //  For Details Data
 exports.details = async (request,response) => {
 
-    await parentCategoriesSchema.findOne({
+    await subCategoriesSchema.findOne({
         deleted_at : null,
         _id : request.params.id
     })
@@ -181,6 +180,7 @@ exports.update = async(request,response) => {
 
     var dataSave = {
         name : request.body.name,
+        parent_category_id : request.body.parent_category_id,
         order : request.body.order,
     }
 
@@ -188,7 +188,7 @@ exports.update = async(request,response) => {
         dataSave.image = request.file.filename
     }
     
-    await parentCategoriesSchema.updateOne({
+    await subCategoriesSchema.updateOne({
         _id : request.params.id
     },
     {
@@ -227,7 +227,7 @@ exports.update = async(request,response) => {
 
 //  For Change Status Data
 exports.changeStatus = async(request,response) => {
-    await parentCategoriesSchema.updateMany(
+    await subCategoriesSchema.updateMany(
         {
             _id : {
                 $in : request.body.ids
@@ -265,7 +265,7 @@ exports.changeStatus = async(request,response) => {
 //  For Delete Data
 exports.destroy = async(request,response) => {
 
-    await parentCategoriesSchema.updateMany(
+    await subCategoriesSchema.updateMany(
         {
             _id : {
                 $in : request.body.ids
