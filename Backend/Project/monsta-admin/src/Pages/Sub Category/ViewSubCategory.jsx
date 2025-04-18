@@ -1,16 +1,113 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../../common/Breadcrumb'
 import { Link } from 'react-router-dom';
 import { MdFilterAltOff, MdModeEdit, MdModeEditOutline } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 import { FaFilter } from 'react-icons/fa';
-// import { MdModeEditOutline } from "react-icons/md";
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Pagination } from "flowbite-react";
 
 export default function ViewCategory() {
-  // let [orderModal, setOrderModal] = useState(false);
 
   let [activeFilter, setactiveFilter] = useState(true);
-  let [activeDropDown, setactiveDropDown] = useState(false);
+  let [filterName, setFilterName] = useState('');
+  var [categories, setCategories] = useState([]);
+  let [checkBoxValues, setCheckBoxValues] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [apiStatus, setApiStatus] = useState(true);
+  const [imagePath, setImagePath] = useState('');
+
+  const onPageChange = (page) => setCurrentPage(page);
+
+  useEffect(() => {
+    axios.post('http://localhost:5000/api/admin/sub-categories/view', {
+      name: filterName
+    })
+      .then((response) => {
+        setCategories(response.data._data);
+        setImagePath(response.data.image_path);
+        setTotalPages(response.data.total_pages);
+      })
+      .catch((error) => {
+        toast.error('Something went wrong !!')
+      });
+  }, [filterName, apiStatus]);
+
+  const filter = (event) => {
+    setFilterName(event.target.value);
+  }
+
+  const selectCheckBox = (id) => {
+    if (checkBoxValues.includes(id)) {
+      var data = checkBoxValues.filter((v) => {
+        if (v != id) {
+          return v;
+        }
+      })
+
+      data = [...data];
+      setCheckBoxValues(data);
+
+    } else {
+      var data = [...checkBoxValues, id];
+      setCheckBoxValues(data);
+    }
+  }
+
+  const selectAllCheckBox = (event) => {
+
+    if (event.target.checked) {
+      var data = categories.map((v) => {
+        return v._id;
+      })
+
+      data = [...data];
+      setCheckBoxValues(data);
+
+    } else {
+      setCheckBoxValues([]);
+    }
+
+  }
+
+  const changeStatus = () => {
+    if (checkBoxValues.length > 0) {
+      if (confirm('Are you sure you want to change status ?')) {
+        axios.post('http://localhost:5000/api/admin/sub-categories/change-status', {
+          ids: checkBoxValues
+        })
+          .then((response) => {
+            setCheckBoxValues([]);
+            setApiStatus(!apiStatus)
+          })
+          .catch((error) => {
+            toast.error('Something went wrong !!')
+          });
+      }
+    }
+  }
+
+  const deleteRecord = () => {
+    if (checkBoxValues.length > 0) {
+      if (confirm('Are you sure you want to delete ?')) {
+        axios.post('http://localhost:5000/api/admin/sub-categories/delete', {
+          ids: checkBoxValues
+        })
+          .then((response) => {
+            setCheckBoxValues([]);
+            setApiStatus(!apiStatus)
+          })
+          .catch((error) => {
+            toast.error('Something went wrong !!')
+          });
+      }
+    }
+  }
+
+
+
   return (
     <section className="w-full">
 
@@ -103,12 +200,11 @@ export default function ViewCategory() {
                         </div>
                       </th>
                       <th scope="col" class="px-6 py-3">
-                      Parent Category Name
+                        Parent Category Name
                       </th>
                       <th scope="col" class="px-0 py-3">
                         Sub Category Name
                       </th>
-                      
                       <th scope="col" class=" w-[12%] ">
                         Image
                       </th>
@@ -124,49 +220,77 @@ export default function ViewCategory() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="bg-white  dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                      <td class="w-4 p-4">
-                        <div class="flex items-center">
-                          <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                          <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                        </div>
-                      </td>
-                      <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
 
-                        <div class="py-4">
-                          Shoe
+                    {
+                      (categories.length > 0)
+                        ?
+                        categories.map((v, i) => {
+                          return (
+                            <tr key={i} class="bg-white  dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                              <td class="w-4 p-4">
+                                <div class="flex items-center">
+                                  <input onClick={() => selectCheckBox(v._id)}
+                                    checked={checkBoxValues.includes(v._id) ? 'checked' : ''}
+                                    id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                  <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                              </td>
+                              <td class="px-6 py-4">{v.parent_category_id}
+                              </td>
+                              <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
 
-                        </div>
-                      </td>
-                      <td class=" py-4">
-                        Men
+                                <div class="py-4">
+                                  <div class="text-base font-semibold">{v.name}</div>
 
-                      </td>
+                                </div>
+                              </th>
+                              <td class="px-6 py-4">
+                                {
+                                  (v.image)
+                                    ?
+                                    <img src={imagePath + v.image} width={40} />
+                                    :
+                                    'N/A'
+                                }
+                              </td>
+                              <td class="px-6 py-4">
+                                {v.order}
+                              </td>
+                              <td class=" py-4">
 
-                      <td class=" py-4">
-                        <img class="w-10 h-10 rounded-full" src="https://packshifts.in/images/iso.png" alt="Jese image" />
-                      </td>
-                      <td class=" py-4">
-                        1
-                      </td>
-                      <td class=" py-4">
-
-                        <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
-                      </td>
-                      <td class=" py-4">
-
-                        <Link to={`/category/sub-category/update/${2222}`} >
-                          <div className="rounded-[50%] w-[40px] h-[40px] flex items-center justify-center text-white bg-blue-700  border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <MdModeEdit className='text-[18px]' />
-                          </div>
-                        </Link>
-
-                      </td>
-                    </tr>
-
+                                {
+                                  v.status
+                                    ?
+                                    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
+                                    :
+                                    <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Deactive</button>
+                                }
 
 
 
+
+                              </td>
+                              <td class=" py-4">
+
+                                <Link to={`/category/sub-category/update/${v._id}`} >
+                                  <div className="rounded-[50%] w-[40px] h-[40px] flex items-center justify-center text-white bg-blue-700  border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    <MdModeEdit className='text-[18px]' />
+                                  </div>
+                                </Link>
+                              </td>
+                            </tr>
+                          )
+                        })
+
+                        :
+
+                        <tr class="bg-white  dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                          <td class="px-6 py-4 text-center" colSpan={5}>
+                            <b>No Record Found !!</b>
+                          </td>
+                        </tr>
+
+                    }
 
                   </tbody>
                 </table>

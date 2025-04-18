@@ -4,40 +4,141 @@ import "dropify/dist/css/dropify.min.css";
 import "dropify/dist/js/dropify.min.js";
 import Breadcrumb from "../../common/Breadcrumb";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios, { toFormData } from "axios";
+import { toast } from "react-toastify";
 
 export default function AddSubCategory() {
-  useEffect(() => {
-    $(".dropify").dropify({
-      messages: {
-        default: "Drag and drop ",
-        replace: "Drag and drop ",
-        remove: "Remove",
-        error: "Oops, something went wrong"
-      }
-    });
-  }, []);
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  const onSubmit = (data) => {
-    
-  };
-  // update work
+  const [imagePath, setImagePath] = useState('');
+  const [imageValue, setImageValue] = useState('');
+  const [parentCategories, setParentCategories] = useState([]);
   const [updateIdState, setUpdateIdState] = useState(false)
+  const [categoryDetails, setCategoryDetails] = useState('');
+
+  const navigate = useNavigate();
+
+  // Update Record
   let updateId = useParams().id
   useEffect(() => {
     if (updateId == undefined) {
       setUpdateIdState(false)
-    }
-    else {
+    } else {
       setUpdateIdState(true)
+
+      axios.post(`http://localhost:5000/api/admin/sub-categories/details/${ updateId }`)
+      .then((response) => {
+        if(response.data._status == true){
+          setCategoryDetails(response.data._data);
+          setValue('name', response.data._data.name);
+          setValue('order', response.data._data.order);
+          setValue('parent_category_id', response.data._data.parent_category_id);
+          setImagePath(response.data.image_path+response.data._data.image);
+        } else {
+          toast.error(response.data._message);
+        }        
+      })
+      .catch((error) => {
+          toast.error('Something went wrong !!')
+      });
     }
   }, [updateId])
+
+  // View Parent Categories
+  useEffect(() => {
+    var filterData = {
+      limit: 1000,
+      status: 1
+    };
+
+    axios.post('http://localhost:5000/api/admin/parent-categories/view', toFormData(filterData))
+      .then((result) => {
+        if (result.data._status) {
+          setParentCategories(result.data._data);
+        }
+      })
+      .catch((error) => {
+        toast.error('Something went wrong !!')
+      })
+  }, []);
+
+  //Dropify Method
+  useEffect(() => {
+
+    const dropifyElement = $("#categoryImage");
+
+    if (dropifyElement.data("dropify")) {
+      dropifyElement.data("dropify").destroy();
+      dropifyElement.removeData("dropify");
+    }
+
+    // **Force Update Dropify Input**
+    dropifyElement.replaceWith(
+      `<input type="file" accept="image/*" name="image" id="categoryImage"
+        class="dropify" data-height="250" data-default-file="${imagePath}"/>`
+    );
+
+    // **Reinitialize Dropify**
+    $("#categoryImage").dropify();
+
+    // **Update React Hook Form when File Changes**
+    $("#categoryImage").on("change", function (event) {
+
+      if (event.target.files.length > 0) {
+        setImageValue(event.target.files[0]); // ✅ Sync React Hook Form
+      }
+    });
+
+
+  }, [imagePath]);
+
+  // Form Validation
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+
+  // Form Sumbit
+  const onSubmit = (data) => {
+    if (imageValue) {
+      data.image = imageValue;
+    }
+
+    if(updateIdState){
+      axios.put(`http://localhost:5000/api/admin/sub-categories/update/${updateId}`, toFormData(data))
+    .then((response) => {
+      if(response.data._status == true){
+        toast.success(response.data._message);
+        navigate('/category/sub-category/view');
+      } else {
+        toast.error(response.data._message);
+      }        
+    })
+    .catch((error) => {
+        toast.error('Something went wrong !!')
+    });
+    } else {
+      axios.post('http://localhost:5000/api/admin/sub-categories/create', toFormData(data))
+      .then((response) => {
+        if(response.data._status == true){
+          toast.success(response.data._message);
+          navigate('/category/sub-category/view');
+        } else {
+          toast.error(response.data._message);
+        }        
+      })
+      .catch((error) => {
+          toast.error('Something went wrong !!')
+      });
+    }
+  };
+
+  const selectCategory = (event) => {
+    setValue('parent_category_id', event.target.value)
+  }
 
   return (
     <section className="w-full">
@@ -59,7 +160,6 @@ export default function AddSubCategory() {
                 <input
                   type="file"
                   accept="image/*"
-                  {...register("categoryImage", { required: "Category image is required" })}
                   id="categoryImage"
                   className="dropify"
                   data-height="230"
@@ -68,20 +168,27 @@ export default function AddSubCategory() {
               </div>
 
               <div className="w-2/3">
-              {/* Parent Category Dropdown */}
-              <div className="mb-5">
+                {/* Parent Category Dropdown */}
+                <div className="mb-5">
                   <label className="block  text-md font-medium text-gray-900">
                     Parent Category Name
                   </label>
                   <select
+                    {...register("parent_category_id", { required: "Select Category is required" })}
                     name="parentCatSelectBox"
+                    onChange={selectCategory}
                     className="border-2 border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                   >
                     <option value="">Select Category</option>
-                    <option value="Mens">Men's</option>
-                    <option value="Women">Women</option>
-                    <option value="Sale">Sale</option>
+                    {
+                      parentCategories.map((v, i) => {
+                        return (
+                          <option value={v._id}>{v.name}</option>
+                        )
+                      })
+                    }
                   </select>
+                  {errors.parent_category_id && <p className="text-red-500">{errors.parent_category_id.message}</p>}
                 </div>
 
                 <div className="mb-5">
@@ -93,12 +200,12 @@ export default function AddSubCategory() {
                   </label>
                   <input
                     type="text"
-                    {...register("categoryName", { required: "Category name is required" })}
+                    {...register("name", { required: "Category name is required" })}
                     id="categoryName"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Category Name"
                   />
-                  {errors.categoryName && <p className="text-red-500">{errors.categoryName.message}</p>}
+                  {errors.name && <p className="text-red-500">{errors.name.message}</p>}
                 </div>
 
                 <div className="mb-5">
@@ -110,14 +217,14 @@ export default function AddSubCategory() {
                   </label>
                   <input
                     type="text"
-                    {...register("Order", { required: "Category Order is required" })}
+                    {...register("order", { required: "Category Order is required" })}
                     id="categoryName"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Category Order"
                   />
-                  {errors.Order && <p className="text-red-500">{errors.Order.message}</p>}
+                  {errors.order && <p className="text-red-500">{errors.order.message}</p>}
                 </div>
-                
+
               </div>
 
 
