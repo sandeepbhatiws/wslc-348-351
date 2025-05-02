@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical Question</title>
+</head>
+<body>
+    <button onclick="arrayReverse()">Reverse</button>
+    <button onclick="nonRepeating()">Non Repeating</button>
+    <button onclick="lowestNumber()">Lowest Number</button>
+    <button onclick="greaterNumber()">Greatest Number</button>
+    <button onclick="vowelsName()">Vowels Names</button>
+    <button onclick="capitalizeName()">Capitalize Names</button>
+
+
+    <script>
+        numbers = [25,99,77,66,44,88,99,20,66,77,66,55];
+
+        function arrayReverse(){
+            // numbers.reverse();
+            var a = [];
+
+            for( var data of numbers){
+                a.unshift(data);
+            }
+
+            console.log(a);
+        }
+
+        function nonRepeating(){
+            var str = 'hello world';
+            var spread = [...str];
+
+            var obj = {};
+
+            for(var data of spread){
+                var a = data.trim().toLowerCase();
+                if(a != ''){
+                    obj[a] = (obj[a] || 0) + 1;
+                }   
+            }
+
+            var output = '';
+            for(var data in spread){
+                var a = spread[data].trim().toLowerCase();
+
+                if(obj[a] == 1){
+                    output = spread[data];
+                    break;
+                }
+            }
+            console.log(output);
+        }
+
+        function lowestNumber(){
+            var lowest = numbers[0];
+
+            for(var data of numbers){
+                if(data < lowest){
+                    lowest = data;
+                }
+            }
+            console.log(lowest);
+        }
+
+        function greaterNumber(){
+            var greatest = numbers[0];
+
+            for(var data of numbers){
+                if(data > greatest){
+                    greatest = data;
+                }
+            }
+            console.log(greatest);
+        }
+
+        function vowelsName(){
+            const indianNames = [ "Arjun", "Vinita", "Ravi", "Nisha", "Ishan", "Priya", "Veer", "Siddharth", "Anika", "Karan", "Ayesha", "Rahul", "Uma", "Vikram", "Neha", "Deepak", "Kavita", "Aditya", "Divya", "Rohan"];
+
+            var vowels = ['a','e','i','o','u'];
+            var names = [];
+
+            for(var v of indianNames){
+                var name = v[0].toLowerCase();
+
+                if(vowels.includes(name) && v.length > 5){
+                    // if(v.length > 5){
+                        names.push(v);
+                    // }
+                }
+                
+            }
+            console.log(names);
+        }
+
+        function capitalizeName(){
+                
+            const indianNames = [ "arjun", "vinita", "ravi", "nisha", "ishan", "priya", "veer", "siddharth", "anika", "karan", "ayesha", "rahul"];
+
+            var names = [];
+
+            for(var v of indianNames){
+                name = v[0].toUpperCase();
+                lastname = v.slice(1);
+
+                names.push(name+lastname);
+            }
+
+            console.log(names);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temparature Converter</title>
+</head>
+<body>
+    
+    <script>
+        var from = prompt('Enter the From value Celcuis (C) Faherniet (F)');
+        var to = prompt('Enter the to value Celcuis (C) Faherniet (F)');
+        var value = prompt('Enter the value');
+
+        if(from == 'C' && to == 'F'){
+            var output = (value * 9/5) + 32;
+            document.write(output);
+        } else if(from == 'F' && to == 'C'){
+            var output = (value - 32) * 5/9;
+            document.write(output);
+        } else {
+            document.write('Invalid value');
+        }
+
+    </script>
+</body>
+</html>

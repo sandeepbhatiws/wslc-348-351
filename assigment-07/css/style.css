@@ -1,0 +1,45 @@
+*{
+	margin: 0px;
+	padding: 0px;
+	text-decoration: 0px;
+}
+body{
+	background: #F5F5F5;
+}
+.clear{
+	clear: both;
+}
+.choose_wscubetech{
+	width: 1200px;
+	border: 0px solid red;
+	margin: auto;
+}
+.choose_heading{
+	text-align: center;
+	padding: 15px;
+	box-sizing: border-box;
+}
+.choose_content_outer{
+	float: left;
+	width: 350px;
+	margin: 25px;
+	background-color: white;
+	text-align: center;
+	border-radius: 15px;
+	padding: 15px;
+	box-sizing: border-box;
+}
+.choose_image img{
+	border: 1px solid black;
+	border-radius: 50px;
+	box-sizing: border-box;
+	padding: 10px;
+	width: 70px;
+	height: 70px;
+}
+.choose_content h2{
+	padding: 15px 0px;
+}
+.choose_content p{
+	line-height: 26px;
+}

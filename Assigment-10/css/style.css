@@ -1,0 +1,63 @@
+*{
+	padding: 0px;
+	margin: 0px;
+	text-decoration: none;
+}
+body{
+	font-family: sans-serif;
+}
+.main{
+	width: 100%;
+}
+.wscubetech_outer{
+	width: 100%;
+	background-image: url('../images/spotlight-bg.webp');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	padding: 80px 50px;
+	box-sizing: border-box;
+}
+.wscubetech_heading{
+	color: white;
+	text-align: center;
+}
+.wscubetech_heading h1{
+	font-size: 44px;
+	padding-right: 20px;
+	background-image: url('../images/spotlight-heading-bg.svg');
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	display: inline;
+}
+.wscubetech_heading p{
+	font-size: 20px;
+	padding-top: 15px;
+}
+.interviews_outer{
+	width: 100%;
+}
+.wscubetech_content{
+	color: white;
+	margin-top: 30px;
+}
+.content{
+	float: left;
+	width: 25%;
+	box-sizing: border-box;
+	text-align: center;
+}
+.clear{
+	clear: both;
+}
+.content h2{
+	font-size: 48px;
+	padding-bottom: 20px;
+}
+.content p{
+	font-size: 20px;
+	color: #9CB2C5;
+}
+.border{
+	border-left: 1px solid gray;
+}

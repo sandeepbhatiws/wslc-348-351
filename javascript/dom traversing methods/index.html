@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Traversing Methods</title>
+    <style>
+        .main{
+            width: 1300px;
+            margin: auto;
+        }
+        .buttons{
+            width: 1300px;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+        .row{
+            background-color: black;
+            color: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="buttons">
+        <button onclick="parent_node()">Parent Node</button>
+        <button onclick="parent_element()">Parent Element</button>
+        <button onclick="domChilds()">Child Nodes</button>
+        <button onclick="domChildren()">Children</button>
+        <button onclick="domFirstChild()">First Child</button>
+        <button onclick="domFirstElement()">First Element Child</button>
+        <button onclick="domLastChild()">Last Child</button>
+        <button onclick="domLastElement()">Last Element Child</button>
+        <button onclick="domNextSibling()">Next Sibling</button>
+        <button onclick="domNextElementSibling()">Next Element Sibling</button>
+        <button onclick="domPreviosSibling()">Previos Sibling</button>
+        <button onclick="domPreviosElementSibling()">Previos Element Sibling</button>
+    </div>
+
+    <div class="main" id="main">
+        <div class="row" id="row1">
+            <p>1. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi est deserunt debitis ut, veniam consequuntur! Numquam officiis animi delectus ea quaerat fugit reprehenderit! Commodi ipsam quas possimus exercitationem! Reiciendis, saepe.</p>
+        </div>
+        <div class="row" id="row2">
+            <p>2. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi est deserunt debitis ut, veniam consequuntur! Numquam officiis animi delectus ea quaerat fugit reprehenderit! Commodi ipsam quas possimus exercitationem! Reiciendis, saepe.</p>
+        </div>
+        <div class="row" id="row3">
+            <p>3. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi est deserunt debitis ut, veniam consequuntur! Numquam officiis animi delectus ea quaerat fugit reprehenderit! Commodi ipsam quas possimus exercitationem! Reiciendis, saepe.</p>
+        </div>
+    </div>
+
+    <script>
+        function domNextElementSibling(){
+            var data = document.getElementById('row1').nextElementSibling;
+            console.log(data);
+        }
+
+        function domPreviosElementSibling(){
+            var data = document.getElementById('row1').previousElementSibling;
+            console.log(data);
+        }
+
+
+        function parent_node(){
+            var data = document.getElementById('row2').parentNode;
+            console.log(data);
+        }
+
+        function parent_element(){
+            var data = document.getElementById('row2').parentElement;
+            console.log(data);
+        }
+
+        function domChilds(){
+            var data = document.getElementById('main').childNodes;
+            console.log(data);
+        }
+
+        function domChildren(){
+            var data = document.getElementById('main').children;
+            console.log(data);
+        }
+
+        function domFirstChild(){
+            var data = document.getElementById('main').firstChild;
+            console.log(data);
+        }
+
+        function domFirstElement(){
+            var data = document.getElementById('main').firstElementChild;
+            console.log(data);
+        }
+
+        function domLastChild(){
+            var data = document.getElementById('main').lastChild;
+            console.log(data);
+        }
+
+        function domLastElement(){
+            var data = document.getElementById('main').lastElementChild;
+            console.log(data);
+        }
+    </script>
+</body>
+</html>

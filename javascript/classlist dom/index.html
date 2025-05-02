@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button{
+            padding: 10px 15px;
+            font-size: 24px;
+            background-color: black;
+            color: white;
+            border: 0px;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .content{
+            border: 1px solid gray;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        .row{
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="cssProperty()">CSS Properties Add</button>
+    <button onclick="classAdd()">Add</button>
+    <button onclick="classRemove()">Remove</button>
+    <button onclick="classToggle()">Toggle</button>
+
+    <div class="content" id="content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi amet at natus officia pariatur dolore rem sequi. Totam iste magnam ex porro optio. Sit harum inventore accusantium, ab delectus voluptatem.
+    </div>
+    
+
+    <script>
+        function cssProperty(){
+            document.getElementById('content').style.backgroundColor = 'red';
+            document.getElementById('content').style.color = 'white';
+        }
+
+        function classAdd(){
+            document.getElementById('content').classList.add('row');
+        }
+
+        function classRemove(){
+            document.getElementById('content').classList.remove('row');
+        }
+
+        function classToggle(){
+            document.getElementById('content').classList.toggle('row');
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+.outer{
+    width: 1400px;
+    margin: auto;
+}
+.heading h1{
+    /* background-color: gray; */
+    text-align: center;
+}
+.row{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.items{
+    flex-basis: 23%;
+    margin: 1%;
+    text-align: center;
+    box-shadow: 0px 0px 5px 2px gray;
+}
+.items img{
+    width: 100%;
+}
+.items h2{
+    padding: 15px;
+}
+.loadMore{
+    text-align: center;
+}
+.loadMore button{
+    background-color: black;
+    color: white;
+    padding: 15px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px;
+}

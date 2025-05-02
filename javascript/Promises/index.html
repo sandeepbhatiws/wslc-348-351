@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    
+    <div class="outer">
+        <div class="heading">
+            <h1>All Movies</h1>
+        </div>
+        <div class="row" id="movies">
+            
+        </div>
+
+        <div class="loadMore">
+            <button id="loadmore">Load More</button>
+        </div>
+    </div>
+
+    <script src="js/custom.js"></script>
+
+    <script>
+        // new Promise((accept,reject) => {
+
+        //     var moviesData = fetch('https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1');
+
+        //     accept(moviesData);
+        // }).then((result) => {
+
+        //     new Promise((accept, reject) => {
+        //         accept(result.json());
+        //     }).then((result) => {
+        //         console.log(result.results);
+        //         displayMovies(result.results);
+        //         console.log('Promise is accepted !!');
+        //     }).catch((error) => {
+        //         console.log('Promise is rejected !!');
+        //     })
+            
+        // }).catch((error) => {
+        //     console.log('Promise is rejected !!');
+        // });
+
+
+        // function displayMovies(movieData){
+
+        //     var data = '';
+
+        //     movieData.forEach((v,i) => {
+        //         // data += '<div class="items"><div><img src="https://image.tmdb.org/t/p/w1280/d8Ryb8AunYAuycVKDp5HpdWPKgC.jpg"/></div><h2>'+ v.original_title +'</h2></div>';
+
+        //         data += `
+        //             <div class="items">
+        //                 <div>
+        //                     <img src="https://image.tmdb.org/t/p/w1280${ v.poster_path }"/>
+        //                 </div>
+        //                 <h2>${ v.original_title }</h2>
+        //             </div>
+        //         `;
+        //     });
+
+        //     document.getElementById('movies').innerHTML = data;
+
+        // }
+
+
+        
+        
+    </script>
+</body>
+</html>

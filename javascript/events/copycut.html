@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <style>
+        .row{
+            width: 500px;
+            margin: auto;
+        }
+        .row input{
+            width: 100%;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+        .output{
+            border: 1px solid gray;
+            padding: 15px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <!-- <input type="text" onkeydown="copyCut(this)" id="input"/> -->
+        <!-- <input type="text" onkeyup="copyCut(this)" id="input"/> -->
+
+
+        <!-- <input type="text" onfocus="copyCut(this)" id="input" value="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia labore iste dicta, porro maiores commodi nostrum corrupti reiciendis distinctio, eos eum dolor possimus repellendus vel vero aliquid ipsa ducimus. Voluptatibus."/> -->
+
+        <!-- <input type="text" onblur="copyCut(this)" id="input" value="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia labore iste dicta, porro maiores commodi nostrum corrupti reiciendis distinctio, eos eum dolor possimus repellendus vel vero aliquid ipsa ducimus. Voluptatibus."/> -->
+
+        <input type="text" onchange="copyCut(this)" id="input" value=""/>
+
+        
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function copyCut(a){
+            // var a = document.getElementById('input').value;
+
+            document.getElementById('output').innerText = a.value;
+            console.log(a.value);
+        }
+    </script>
+</body>
+</html>

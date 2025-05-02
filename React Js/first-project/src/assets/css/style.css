@@ -1,0 +1,9 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+.row{
+    background-color: black;
+    color: white;
+    padding: 15px;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .row{
+            width: 100px;
+            margin: auto;
+            text-align: center;
+        }
+        button{
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <img src="images/off.gif" id="image"/>
+
+        <!-- <button onclick="changeImage('images/on.gif')">On</button>
+        <button onclick="changeImage('images/off.gif')">Off</button> -->
+
+        <button onclick="changeToggleImage()" id="button">On</button>
+    </div>
+
+
+    <script>
+        function changeImage(imageName){
+            document.getElementById('image').src = imageName;
+        }
+
+
+        function changeToggleImage(){
+            var text = document.getElementById('button').innerText;
+
+            if(text == 'On'){
+                // document.getElementById('image').src = 'images/on.gif';
+                document.getElementById('image').setAttribute('src','images/on.gif');
+                document.getElementById('button').innerText = 'Off';
+            } else {
+                document.getElementById('image').src = 'images/off.gif';
+                document.getElementById('button').innerText = 'On';
+            }
+        }
+    </script>
+</body>
+</html>

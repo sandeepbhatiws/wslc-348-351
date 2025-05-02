@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event listner</title>
+</head>
+<body>
+    <button id="btn">Click Me 1</button>
+    <button id="btn">Click Me 2</button>
+    <button id="btn">Click Me 3</button>
+    <button id="btn">Click Me 4</button>
+    <button id="btn">Click Me 5</button>
+    <button id="btn">Click Me 6</button>
+
+
+    <form id="sumbit" autocomplete="off">
+        <input type="text" name="email"/>
+        <button type="submit">Submit</button>
+    </form>
+
+    <ul id="output"></ul>
+
+    <script>
+
+        // function printData(){
+        //     console.log('Welcome to WS');
+        // }
+
+        // // document.getElementById('btn').addEventListener('click',printData);
+
+        // document.getElementById('btn').addEventListener('click',(event) => {
+        //     console.log('Welcome to WsCube Tech');
+        //     console.log(event.target.innerText);
+        // });
+
+        var btn = document.querySelectorAll('#btn');
+        btn.forEach((value,index) => {
+            value.addEventListener('click',(event)=>{
+                console.log(event.target.innerText);
+            })
+        })
+    
+        document.getElementById('sumbit').addEventListener('submit',(event) => {
+            event.preventDefault();
+
+            var email = event.target.email.value;
+            var data = document.getElementById('output').innerHTML;
+
+            data +='<li>'+ email +'</li>';
+
+            document.getElementById('output').innerHTML = data;
+
+
+            event.target.reset();
+        });
+
+    </script>
+</body>
+</html>

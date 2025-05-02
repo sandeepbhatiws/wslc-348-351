@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Box</title>
+    <style>
+        .row{
+            width: 300px;
+            margin: auto;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .column{
+            width: 100px;
+            text-align: center;
+            padding: 25px;
+            box-sizing: border-box;
+            border: 1px solid gray;
+            background-color: black;
+            color: white;
+            
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="row">
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >1</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >2</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >3</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >4</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >5</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >6</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >7</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >8</div>
+        <div class="column" onmouseover="changeColor(this)" onmouseout="removeColor(this)" >9</div>
+    </div>
+
+    <script>
+        var numbers = [];
+        function changeColor(a){
+            
+            if(numbers.length < 9){
+                a.style.backgroundColor = 'red';
+            }
+
+            if(!numbers.includes(a.innerText)){
+                numbers.push(a.innerText);
+            }
+
+            console.log(numbers);
+        }
+
+        function removeColor(a){
+            a.style.backgroundColor = '';
+        }
+    </script>
+</body>
+</html>
