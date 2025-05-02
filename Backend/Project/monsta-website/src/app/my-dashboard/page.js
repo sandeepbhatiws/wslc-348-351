@@ -4,12 +4,62 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { loginRegister, logOut } from '../ReduxToolkit/loginSlice';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [selectedTitle, setSelectedTitle] = useState("Mr.");
 
+    const [userProfile, setUserProfile] = useState('');
+    const [profileStatus, setProfileStatus] = useState(true);
+
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        axios.post('http://localhost:5000/api/website/users/view-profile','',{
+            headers : {
+                Authorization : 'Bearer '+Cookies.get('user_token')
+            }   
+        })
+        .then((result) => {
+            if (result.data._status) {
+                setUserProfile(result.data._data);
+                dispatch(loginRegister({ user_name : result.data._data.name  }))
+            } else {
+                toast.error(result.data._message);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            toast.error('Something went wrong !!');
+        });
+    },[profileStatus])
+
+    const updateProfile = (event) => {
+        event.preventDefault();
+
+        axios.post('http://localhost:5000/api/website/users/update-profile',event.target,{
+            headers : {
+                Authorization : 'Bearer '+Cookies.get('user_token')
+            }   
+        })
+        .then((result) => {
+            if (result.data._status) {
+                toast.success(result.data._message);
+                setProfileStatus(!profileStatus);
+            } else {
+                toast.error(result.data._message);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            toast.error('Something went wrong !!');
+        });
+    }
 
     useEffect(() => {
         var getCookies = Cookies.get('user_token');
@@ -19,7 +69,7 @@ export default function DashboardPage() {
     },[]);
 
     const logout = () => {
-        Cookies.remove('user_token');
+        dispatch(logOut());
         router.push('/login-register')
     }
 
@@ -288,7 +338,9 @@ export default function DashboardPage() {
                                     <div className="login">
                                         <div className="account_form login_form_container">
                                             <div className="account_login_form">
-                                                <form id="personal_information" autoComplete="off" noValidate="noValidate" className="bv-form">
+                                                <form id="personal_information" autoComplete="off" 
+                                                onSubmit={ updateProfile }
+                                                noValidate="noValidate" className="bv-form">
 
                                                     <div className="col-xl-12">
                                                         <div className="input-radio">
@@ -319,28 +371,34 @@ export default function DashboardPage() {
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Name*</label>
-                                                            <input type="text" className="form-control" id="name" name="name" data-bv-field="name" />
+                                                            <input type="text"
+                                                            defaultValue={userProfile.name}
+                                                            className="form-control" id="name" name="name" data-bv-field="name" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Email*</label>
-                                                            <input type="text" className="form-control" id="email" name="email" placeholdere="sultankhan.wscube@gmail.com" readOnly="readOnly" data-bv-field="email" />
+                                                            <input type="text" 
+                                                            defaultValue={userProfile.email}
+                                                            className="form-control" id="email" readOnly="readOnly" data-bv-field="email" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Mobile Number*</label>
-                                                            <input type="text" className="form-control numeric" id="mobile_number" maxLength="15" name="mobile_number" data-bv-field="mobile_number" />
+                                                            <input type="text" 
+                                                            defaultValue={userProfile.mobile_number} className="form-control numeric" id="mobile_number" maxLength="15" name="mobile_number" data-bv-field="mobile_number" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Address*</label>
-                                                            <input type="text" className="form-control" name="address" id="address"  data-bv-field="address" />
+                                                            <input type="text" 
+                                                            defaultValue={userProfile.address} className="form-control" name="address" id="address"  data-bv-field="address" />
                                                         </div>
                                                     </div>
 

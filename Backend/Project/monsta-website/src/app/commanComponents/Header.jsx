@@ -11,9 +11,13 @@ import { RxCross2 } from "react-icons/rx";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Accordion from 'react-bootstrap/Accordion';
 import { FaAngleDown } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 export default function Header() {
     const [showCart, setShowCart] = useState(false);
+
+    let userToken =  useSelector((state)=>state.login.user_token);
+    let userName =  useSelector((state)=>state.login.user_name);
 
     const handleCloseCart = () => setShowCart(false);
     const handleShowCart = () => setShowCart(true);
@@ -37,12 +41,22 @@ export default function Header() {
                             </Col>
                             <Col lg={5} md={12}>
 
-                                <Link href={"/login-register"}>
-                                    <ul className="auth d-flex justify-content-end">
-                                        <li>Login &nbsp;/</li>
-                                        <li>Register</li>
-                                    </ul>
-                                </Link>
+                                {
+                                    userToken
+                                    ?
+                                    <Link href={"/my-dashboard"}>
+                                        <ul className="auth d-flex justify-content-end">
+                                            <li>{userName}</li>
+                                        </ul>
+                                    </Link>
+                                    :
+                                    <Link href={"/login-register"}>
+                                        <ul className="auth d-flex justify-content-end">
+                                            <li>Login &nbsp;/</li>
+                                            <li>Register</li>
+                                        </ul>
+                                    </Link>
+                                }
 
                             </Col>
                         </Row>
