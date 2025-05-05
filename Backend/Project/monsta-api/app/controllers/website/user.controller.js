@@ -2,6 +2,18 @@ const userSchema = require('../../models/user');
 const mongodb = require('mongodb');
 var jwt = require('jsonwebtoken');
 var secretKey = '123456789';
+const nodemailer = require("nodemailer");
+
+// Create a test account or replace with real credentials.
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: "frahim9900@gmail.com",
+      pass: "msyttpjhrrjejosi",
+    },
+});
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -56,52 +68,52 @@ exports.login = async (request, response) => {
         deleted_at: null,
         email: request.body.email,
     })
-        .then((resp) => {
-            if (resp) {
+    .then((resp) => {
+        if (resp) {
 
-                var checkPassword = bcrypt.compareSync(request.body.password, resp.password);
+            var checkPassword = bcrypt.compareSync(request.body.password, resp.password);
 
-                if (checkPassword) {
-                    var token = jwt.sign({ data: resp }, secretKey, { expiresIn: '24h' });
+            if (checkPassword) {
+                var token = jwt.sign({ data: resp }, secretKey, { expiresIn: '24h' });
 
-                    const result = {
-                        _status: true,
-                        _message: 'Login succussfully.',
-                        _token: token,
-                        _data: resp
-                    }
-
-                    response.send(result);
-                } else {
-                    const result = {
-                        _status: false,
-                        _message: 'Incorrect password.',
-                        _data: null
-                    }
-
-                    response.send(result);
+                const result = {
+                    _status: true,
+                    _message: 'Login succussfully.',
+                    _token: token,
+                    _data: resp
                 }
 
-
+                response.send(result);
             } else {
                 const result = {
                     _status: false,
-                    _message: 'Invalid email id.',
+                    _message: 'Incorrect password.',
                     _data: null
                 }
 
                 response.send(result);
             }
-        })
-        .catch(() => {
+
+
+        } else {
             const result = {
                 _status: false,
-                _message: 'Something went wrong !!',
+                _message: 'Invalid email id.',
                 _data: null
             }
 
             response.send(result);
-        })
+        }
+    })
+    .catch(() => {
+        const result = {
+            _status: false,
+            _message: 'Something went wrong !!',
+            _data: null
+        }
+
+        response.send(result);
+    })
 
 }
 
@@ -366,229 +378,126 @@ exports.changePassword = async (request, response) => {
 // For Forgot Password
 exports.forgotPassword = async (request, response) => {
 
+    await userSchema.findOne({
+        email: request.body.email
+    })
+    .then(async(resp) => {
+        if (resp) {
+
+            var link = `http://localhost:3000/reset-password/${ resp._id }`;
+
+            const info = await transporter.sendMail({
+                from: '"Frahim" <frahim9900@gmail.com>',
+                to: "sandeep.bhati@wscubetech.com",
+                subject: "Reset Your Password",
+                // text: "Hello world?", // plain‑text body
+                html: `
+                    <h2>Reset Your Password</h2>
+                    <p>Hi ${ resp.name },</p>
+                    <p>We received a request to reset the password for your account. If you made this request, click the button below to reset your password:</p>
+                    
+                    <a href=${ link } class="button">Reset Password</a>
+                    
+                    <p>If you did not request a password reset, you can safely ignore this email. Your account remains secure.</p>
+                    <p>This link will expire in <strong>[X hours]</strong>.</p>
+
+                    <div class="footer">
+                    <p>Need help? Contact us at [support@example.com]</p>
+                    <p>© [Year] [Your Company Name]. All rights reserved.</p>
+                    </div>
+                `, // HTML body
+            });
+
+            const result = {
+                _status: true,
+                _message: 'Email sent Successfully !!',
+            }
+
+            response.send(result);
+        } else {
+            const result = {
+                _status: false,
+                _message: "Email Id does't exit.",
+                _data: []
+            }
+
+            response.send(result);
+        }
+
+    })
+    .catch(() => {
+        const result = {
+            _status: false,
+            _message: 'Something went wrong !!',
+            _data: null
+        }
+
+        response.send(result);
+    })
 }
 
 // For Reset Password
 exports.resetPassword = async (request, response) => {
-
-}
-
-
-
-
-
-
-
-//  For View Data
-exports.view = async (request, response) => {
-
-    var limit = 15;
-    var page = 1;
-
-    if (request.body.limit != '' && request.body.limit != undefined) {
-        limit = request.body.limit;
-    }
-
-    if (request.body.page != '' && request.body.page != undefined) {
-        page = request.body.page;
-    }
-
-    skip = (page - 1) * limit;
-
-    const condition = {
+    await userSchema.findOne({
         deleted_at: null,
-    }
-
-    if (request.body.name != '' && request.body.name != undefined) {
-        var nameRegex = new RegExp(request.body.name, "i");
-        condition.name = nameRegex;
-    }
-
-    await defaultSchema.find(condition).select('name status order')
-        .limit(limit).skip(skip)
-        .sort({
-            _id: 'desc'
-        })
-        .then((resp) => {
-            if (resp.length > 0) {
-                const result = {
-                    _status: true,
-                    _message: 'Record inserted succussfully',
-                    _data: resp
-                }
-
-                response.send(result);
-            } else {
-                const result = {
-                    _status: false,
-                    _message: 'No record found.',
-                    _data: []
-                }
-
-                response.send(result);
-            }
-
-        })
-        .catch(() => {
-            const result = {
-                _status: false,
-                _message: 'Something went wrong !!',
-                _data: null
-            }
-
-            response.send(result);
-        })
-}
-
-//  For Details Data
-exports.details = async (request, response) => {
-
-    await defaultSchema.findOne({
-        deleted_at: null,
-        _id: request.params.id
+        _id: request.body.id,
     })
-        .then((resp) => {
-            if (resp) {
-                const result = {
-                    _status: true,
-                    _message: 'Record fetch succussfully',
-                    _data: resp
-                }
-
-                response.send(result);
-            } else {
-                const result = {
-                    _status: false,
-                    _message: 'No record found.',
-                    _data: []
-                }
-
-                response.send(result);
-            }
-
-        })
-        .catch(() => {
-            const result = {
-                _status: false,
-                _message: 'Something went wrong !!',
-                _data: null
-            }
-
-            response.send(result);
-        })
-}
-
-//  For Update Data
-exports.update = async (request, response) => {
-
-    var dataSave = {
-        name: request.body.name,
-        order: request.body.order,
-    }
-
-    await defaultSchema.updateOne({
-        _id: request.params.id
-    },
-        {
-            $set: dataSave
-        })
-        .then((resp) => {
-            const result = {
-                _status: true,
-                _message: 'Record updated succussfully',
-                _data: resp
-            }
-
-            response.send(result);
-        })
-        .catch((error) => {
-            var error_messages = [];
-            var errorKey = {};
-
-            for (var data in error.errors) {
-                errorKey[data] = error.errors[data].properties.message;
-                error_messages.push(errorKey);
-            }
-
-            const result = {
-                _status: false,
-                _message: 'Something went wrong !!',
-                error_messages: error_messages,
-                _data: null
-            }
-
-            response.send(result);
-        })
-
-}
-
-//  For Change Status Data
-exports.changeStatus = async (request, response) => {
-    await defaultSchema.updateMany(
-        {
-            _id: {
-                $in: request.body.ids
-            }
-        },
-        [
-            {
+    .then(async(resp) => {
+        if (resp) {
+            
+            await userSchema.updateOne({
+                _id: request.body.id
+            }, {
                 $set: {
-                    status: {
-                        $not: "$status"
-                    }
+                    password : bcrypt.hashSync(request.body.confirm_password, saltRounds)
                 }
+            })
+            .then((resp) => {
+                if (resp) {
+                    const result = {
+                        _status: true,
+                        _message: 'Password Update succussfully !!',
+                    }
+
+                    response.send(result);
+                } else {
+                    const result = {
+                        _status: false,
+                        _message: 'No record found.',
+                        _data: []
+                    }
+
+                    response.send(result);
+                }
+
+            })
+            .catch(() => {
+                const result = {
+                    _status: false,
+                    _message: 'Something went wrong !!',
+                    _data: null
+                }
+
+                response.send(result);
+            })
+
+        } else {
+            const result = {
+                _status: false,
+                _message: 'Invalid email id.',
+                _data: null
             }
-        ]
-    ).then((result) => {
-        const data = {
-            _status: true,
-            _message: 'Change Status succussfully',
-            _data: result
+
+            response.send(result);
         }
-
-        response.send(data);
-
-    }).catch((error) => {
-        const data = {
-            _status: false,
-            _message: 'Something went wrong !!',
-            _data: ''
-        }
-
-        response.send(data);
     })
-}
-
-//  For Delete Data
-exports.destroy = async (request, response) => {
-
-    await defaultSchema.updateMany(
-        {
-            _id: {
-                $in: request.body.ids
-            }
-        },
-        {
-            $set: {
-                deleted_at: Date.now()
-            }
-        }
-    ).then((result) => {
-        const data = {
-            _status: true,
-            _message: 'Record deleted succussfully',
-            _data: result
-        }
-
-        response.send(data);
-
-    }).catch((error) => {
-        const data = {
+    .catch(() => {
+        const result = {
             _status: false,
             _message: 'Something went wrong !!',
-            _data: ''
+            _data: null
         }
 
-        response.send(data);
+        response.send(result);
     })
 }
