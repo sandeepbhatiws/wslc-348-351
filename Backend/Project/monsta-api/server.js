@@ -36,6 +36,7 @@ require('./app/routes/admin/product.routes.js')(server);
 // Website Routes URL
 require('./app/routes/website/parentCategories.routes.js')(server);
 require('./app/routes/website/user.routes.js')(server);
+require('./app/routes/website/order.routes.js')(server);
 
 
 server.get('*',(request,response) => {

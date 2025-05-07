@@ -11,10 +11,9 @@ export function middleware(request) {
     return NextResponse.redirect(new URL('/login-register', request.url));
   }
 
-//   if (!isLoggedIn && url.pathname.startsWith('/chekout')) {
-//     return NextResponse.redirect(new URL('/login-register', request.url));
-
-//   }
+  if (!isLoggedIn && url.pathname.startsWith('/checkout')) {
+    return NextResponse.redirect(new URL('/login-register', request.url));
+  }
 
   if (isLoggedIn && url.pathname.startsWith('/login-register')) {
     return NextResponse.redirect(new URL('/my-dashboard', request.url));

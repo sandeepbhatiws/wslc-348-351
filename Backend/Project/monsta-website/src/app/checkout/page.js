@@ -3,8 +3,118 @@ import React from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import "../globals.css";
 import Link from 'next/link';
+import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import axios, { toFormData } from 'axios';
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function page() {
+
+    const { error, isLoading, Razorpay } = useRazorpay();
+
+    const router = useRouter();
+
+    const placeOrder = (e) => {
+        e.preventDefault();
+
+        const orderData = {
+            total_amount:1000,
+            discount:100,
+            net_amount:900,
+            product_info:[{id: 1,name : 'Tshirt',description : '',},{id: 2,name : 'Jeans',description : '',}],
+            shipping_address:{name : e.target.name.value,email : 'sandeep@gmail.com',mobile_number : e.target.mobile_number.value,address : 'Jodhpur'},
+            billing_address:{name : e.target.name.value,email : 'sandeep@gmail.com',mobile_number : e.target.mobile_number.value,address : 'Jodhpur'},
+        }
+
+
+        axios.post('http://localhost:5000/api/website/place-order',toFormData(orderData),{
+            headers : {
+                Authorization : 'Bearer '+Cookies.get('user_token')
+            }   
+        })
+        .then((result) => {
+            if (result.data._status) {
+                handlePayment(result.data.orderInfo);
+            } else {
+                console.log(1);
+                toast.error(result.data._message);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(2);
+            toast.error('Something went wrong !!');
+        });
+    }
+
+    const handlePayment = (orderInfo) => {
+        const options = {
+          key: "rzp_test_tFz6O0QKcTtRj6",
+          amount: orderInfo.amount, // Amount in paise
+          currency: "INR",
+          name: "WsCube Tech",
+          description: "WsCube Tech",
+          order_id: orderInfo.id, // Generate order_id on server
+          handler: (response) => {
+            console.log(response);
+            toast.success('Payment Successful!')
+            orderStatus(2, 2,  response.rozorpay_order_id, response.razorpay_payment_id);
+          },
+          prefill: {
+            name: "Sandeep Bhati",
+            email: "sandeep@gmail.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: "#F37254",
+          },
+        };
+    
+        const razorpayInstance = new Razorpay(options);
+
+        razorpayInstance.on("payment.failed", function (response) {
+            toast.error('Payment Failed !!')
+            console.log(response);
+            orderStatus(3,1,response.error.metadata.order_id, response.error.metadata.payment_id)
+            // alert(response.error.code);
+            // alert(response.error.description);
+            // alert(response.error.source);
+            // alert(response.error.step);
+            // alert(response.error.reason);
+            // alert(response.error.metadata.order_id);
+            // alert(response.error.metadata.payment_id);
+        });
+
+        razorpayInstance.open();
+    };
+
+    const orderStatus = (payment_status,order_status, order_id, transaction_id) => {
+        axios.post(`http://localhost:5000/api/website/place-order/update-status`,{
+            payment_status : payment_status,
+            order_status : order_status,
+            order_id : order_id,
+            transaction_id : transaction_id
+        }, {
+            headers : {
+                Authorization : 'Bearer '+Cookies.get('user_token')
+            }
+        })
+        .then((success) => {
+            if(success.data._status == true){
+                router.push('/my-dashboard');
+            } else {
+                toast.error('Something Went Wrong !!');
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log(5);
+            toast.error('Something Went Wrong !!');
+        })  
+    }
+
+
     return (
         <>
             <Container fluid className='breadcrumbs_area'>
@@ -26,7 +136,7 @@ export default function page() {
             <section className='border-bottom border-1 pb-5'>
             <Container className='checkout_form'>
                 <Row>
-                    <Form id='checkout_address' autoComplete='off' noValidate='novalidate' className="bv-form">
+                    <Form id='checkout_address' autoComplete='off' noValidate='novalidate' className="bv-form" onSubmit={ placeOrder }>
                         <Button type='submit' style={{ display: "none", width: "0", height: "0" }}></Button>
                         <Row>
                             <Col lg={6} md={6}>
